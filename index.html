@@ -101,6 +101,15 @@ body::after{
 .topbar__nav a:hover{color:var(--paper);}
 .topbar__nav a:hover::after{width:100%;}
 
+.topbar__actions{display:flex;align-items:center;gap:18px;}
+.lang-switch{display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden;font-size:12px;letter-spacing:.08em;}
+.lang-switch button{
+  background:transparent;border:0;color:var(--fog);padding:7px 11px;cursor:pointer;
+  font-family:var(--f-body);font-weight:500;transition:color .25s ease,background .25s ease;
+}
+.lang-switch button.is-active{background:var(--gold);color:#000;}
+.lang-switch button:not(.is-active):hover{color:var(--paper);}
+
 /* ============================================================
    buttons
    ============================================================ */
@@ -327,11 +336,12 @@ section{position:relative;z-index:2;}
   .rail{display:none;}
   .topbar{left:0;}
   .topbar__nav{display:none;}
+  .topbar__actions{gap:12px;}
   .hero{padding-top:104px;}
   .hero__facts{grid-template-columns:1fr;}
   .hero__fact{padding:16px 0 0;}
   .term{grid-template-columns:1fr;}
-  .btn{width:100%;justify-content:center;}
+  .hero__cta .btn,.contact__row .btn{width:100%;justify-content:center;}
   .contact__row{flex-direction:column;align-items:stretch;}
   .roadmap__line{grid-template-columns:1fr;gap:32px;padding-top:0;padding-left:22px;}
   .roadmap__line::before,.roadmap__line::after{top:0;bottom:0;left:5px;right:auto;width:1px;height:auto;}
@@ -360,17 +370,22 @@ body{padding-left:var(--rail);}
 
 <header class="topbar" id="topbar">
   <a class="topbar__brand" href="#top">N<span>S</span></a>
-  <nav class="topbar__nav" aria-label="Розділи">
-    <a href="#approach">Підхід</a>
-    <a href="#impact">Вплив</a>
-    <a href="#stack">Стек</a>
-    <a href="#roadmap">Траєкторія</a>
-    <a href="#terms">Умови</a>
-    <a href="#contact">Контакт</a>
+  <nav class="topbar__nav" aria-label="Sections">
+    <a href="#approach" data-i18n="nav.approach">Підхід</a>
+    <a href="#impact" data-i18n="nav.impact">Вплив</a>
+    <a href="#stack" data-i18n="nav.stack">Стек</a>
+    <a href="#terms" data-i18n="nav.terms">Умови</a>
+    <a href="#contact" data-i18n="nav.contact">Контакт</a>
   </nav>
-  <a class="btn btn--solid" data-magnet href="#contact" style="padding:11px 20px;font-size:13px;">
-    Обговорити проєкт
-  </a>
+  <div class="topbar__actions">
+    <div class="lang-switch" id="langSwitch" aria-label="Language">
+      <button type="button" data-lang="uk" class="is-active">UA</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <a class="btn btn--solid" data-magnet href="#contact" style="padding:11px 20px;font-size:13px;" data-i18n="nav.cta">
+      Обговорити проєкт
+    </a>
+  </div>
 </header>
 
 <main id="top">
@@ -379,30 +394,30 @@ body{padding-left:var(--rail);}
   <section class="hero shell">
     <div class="hero__grid">
       <div>
-        <p class="hero__name lift" data-delay="1">Назар Семененко</p>
+        <p class="hero__name lift" data-delay="1" data-i18n="hero.name">Назар Семененко</p>
 
-        <h1 class="lift" data-delay="2">Інфраструктура безпеки за <em>тижні</em>, а не за квартали.</h1>
+        <h1 class="lift" data-delay="2" data-i18n-html="hero.title">Інфраструктура безпеки за <em>тижні</em>, а не за квартали.</h1>
 
         <p class="hero__status lift" data-delay="3">
-          <span class="hero__status-role">Digital Systems Architect &amp; Cybersecurity Specialist</span>
-          <span class="hero__status-aim">Aiming for UNODA — Global Security Infrastructure</span>
+          <span class="hero__status-role" data-i18n="hero.role">Digital Systems Architect &amp; Cybersecurity Specialist</span>
+          <span class="hero__status-aim" data-i18n="hero.aim">Aiming for UNODA — Global Security Infrastructure</span>
         </p>
 
-        <p class="hero__manifesto lift" data-delay="4">
+        <p class="hero__manifesto lift" data-delay="4" data-i18n="hero.manifesto">
           Я проєктую архітектуру систем захисту й веду штучний інтелект як інженерну бригаду:
           аналіз загроз, інтеграція ШІ в критичну інфраструктуру та розробка високонадійних
           систем — на швидкості, недоступній командам, що працюють руками рядок за рядком.
         </p>
 
         <div class="hero__cta lift" data-delay="5">
-          <a class="btn btn--solid" data-magnet href="#contact"><span class="btn__pulse"></span>Написати в Telegram</a>
-          <a class="btn btn--ghost" data-magnet href="#impact">Глобальний вплив</a>
+          <a class="btn btn--solid" data-magnet href="#contact"><span class="btn__pulse"></span><span data-i18n="hero.ctaTelegram">Написати в Telegram</span></a>
+          <a class="btn btn--ghost" data-magnet href="#impact" data-i18n="hero.ctaImpact">Глобальний вплив</a>
         </div>
 
         <dl class="hero__facts lift" data-delay="5">
-          <div class="hero__fact"><dt>Метод</dt><dd>Людина-архітектор + ШІ</dd></div>
-          <div class="hero__fact"><dt>Фокус</dt><dd>OSINT, MITRE ATT&amp;CK, ситуаційні центри</dd></div>
-          <div class="hero__fact"><dt>Орієнтир</dt><dd>UNODA — Нью-Йорк / Женева</dd></div>
+          <div class="hero__fact"><dt data-i18n="hero.fact1.dt">Метод</dt><dd data-i18n="hero.fact1.dd">Людина-архітектор + ШІ</dd></div>
+          <div class="hero__fact"><dt data-i18n="hero.fact2.dt">Фокус</dt><dd data-i18n="hero.fact2.dd">OSINT, MITRE ATT&amp;CK, ситуаційні центри</dd></div>
+          <div class="hero__fact"><dt data-i18n="hero.fact3.dt">Орієнтир</dt><dd data-i18n="hero.fact3.dd">UNODA — Нью-Йорк / Женева</dd></div>
         </dl>
       </div>
 
@@ -423,10 +438,10 @@ body{padding-left:var(--rail);}
   <section class="sec shell" id="approach">
     <div class="sec__head">
       <div class="lift">
-        <p class="sec__index">Підхід</p>
-        <h2 class="sec__title">Людина-архітектор плюс штучний інтелект</h2>
+        <p class="sec__index" data-i18n="approach.index">Підхід</p>
+        <h2 class="sec__title" data-i18n="approach.title">Людина-архітектор плюс штучний інтелект</h2>
       </div>
-      <p class="sec__lead lift" data-delay="1">
+      <p class="sec__lead lift" data-delay="1" data-i18n="approach.lead">
         Інструмент не замінює інженера. Він прибирає з процесу все, що не є мисленням:
         рутину, бойлерплейт, пошук по документації.
       </p>
@@ -434,12 +449,12 @@ body{padding-left:var(--rail);}
 
     <div class="approach">
       <div class="lift" data-delay="1">
-        <p>
+        <p data-i18n-html="approach.p1">
           <strong>Архітектура — за людиною.</strong> Межі системи, модель даних, вимоги до безпеки,
           точки відмови й те, що станеться з проєктом на другий рік життя — це рішення,
           які я приймаю сам і за які відповідаю.
         </p>
-        <p>
+        <p data-i18n-html="approach.p2">
           <strong>Швидкість — за моделями.</strong> Реалізація, рефакторинг, тести, документація
           йдуть паралельними потоками. Я тримаю контекст і перевіряю кожен шар, а не приймаю
           згенероване на віру.
@@ -447,9 +462,9 @@ body{padding-left:var(--rail);}
       </div>
       <div class="lift" data-delay="2">
         <div class="equation">
-          <span>тиждень команди</span><i>→</i><span>день роботи</span>
+          <span data-i18n="approach.eq1">тиждень команди</span><i>→</i><span data-i18n="approach.eq2">день роботи</span>
         </div>
-        <p style="margin-top:22px;">
+        <p style="margin-top:22px;" data-i18n="approach.p3">
           Так побудовано HORIZON — власну систему моніторингу загроз із автоматизованим парсингом,
           прив'язкою до матриці MITRE ATT&amp;CK і генерацією офіційних документів
           англійською та іспанською. Та сама дисципліна застосовується до комерційних замовлень
@@ -465,10 +480,10 @@ body{padding-left:var(--rail);}
   <section class="sec shell" id="impact">
     <div class="sec__head">
       <div class="lift">
-        <p class="sec__index">Глобальний вплив</p>
-        <h2 class="sec__title">Аналітика, що витримує рівень міжнародних місій</h2>
+        <p class="sec__index" data-i18n="impact.index">Глобальний вплив</p>
+        <h2 class="sec__title" data-i18n="impact.title">Аналітика, що витримує рівень міжнародних місій</h2>
       </div>
-      <p class="sec__lead lift" data-delay="1">
+      <p class="sec__lead lift" data-delay="1" data-i18n="impact.lead">
         Не блог про OSINT, а інфраструктура: збір даних, класифікація загроз і генерація
         документів, готових лягти на стіл дипломата.
       </p>
@@ -476,11 +491,11 @@ body{padding-left:var(--rail);}
 
     <div class="impact-grid">
       <div class="impact-statement lift" data-delay="1">
-        <p>
+        <p data-i18n="impact.s1">
           Три роки веду канали військової розвідки з відкритих джерел — щоденна верифікація,
           картування тактичних змін і фільтрація шуму у форматі, який витримує перевірку.
         </p>
-        <p>
+        <p data-i18n="impact.s2">
           HORIZON — система моніторингу загроз і ситуаційний центр кіберрозвідки на
           Python та Groq AI: автоматизований парсинг відкритих джерел, класифікація інцидентів
           за матрицею MITRE ATT&amp;CK, симуляція кібервоєнних сценаріїв і генерація офіційних
@@ -490,29 +505,29 @@ body{padding-left:var(--rail);}
 
       <div class="impact-list lift" data-delay="2">
         <div class="impact-item">
-          <p class="impact-item__tag">OSINT / РОЗВІДКА</p>
-          <h3>Три роки в полі</h3>
-          <p>Ведення каналів військової розвідки з відкритих джерел: верифікація, геолокація, побудова хронології подій без доступу до закритих каналів.</p>
+          <p class="impact-item__tag" data-i18n="impact.i1.tag">OSINT / РОЗВІДКА</p>
+          <h3 data-i18n="impact.i1.h">Три роки в полі</h3>
+          <p data-i18n="impact.i1.p">Ведення каналів військової розвідки з відкритих джерел: верифікація, геолокація, побудова хронології подій без доступу до закритих каналів.</p>
         </div>
         <div class="impact-item">
-          <p class="impact-item__tag">MITRE ATT&amp;CK</p>
-          <h3>Структурована класифікація загроз</h3>
-          <p>Прив'язка інцидентів до тактик і технік матриці ATT&amp;CK — той самий словник, яким користуються аналітики державних CERT.</p>
+          <p class="impact-item__tag" data-i18n="impact.i2.tag">MITRE ATT&amp;CK</p>
+          <h3 data-i18n="impact.i2.h">Структурована класифікація загроз</h3>
+          <p data-i18n="impact.i2.p">Прив'язка інцидентів до тактик і технік матриці ATT&amp;CK — той самий словник, яким користуються аналітики державних CERT.</p>
         </div>
         <div class="impact-item">
-          <p class="impact-item__tag">СИТУАЦІЙНИЙ ЦЕНТР</p>
-          <h3>HORIZON: кіберрозвідка в реальному часі</h3>
-          <p>Автоматизований парсинг джерел, оцінка загроз і панель ситуаційної обізнаності — робоча інфраструктура, а не дашборд для демонстрації.</p>
+          <p class="impact-item__tag" data-i18n="impact.i3.tag">СИТУАЦІЙНИЙ ЦЕНТР</p>
+          <h3 data-i18n="impact.i3.h">HORIZON: кіберрозвідка в реальному часі</h3>
+          <p data-i18n="impact.i3.p">Автоматизований парсинг джерел, оцінка загроз і панель ситуаційної обізнаності — робоча інфраструктура, а не дашборд для демонстрації.</p>
         </div>
         <div class="impact-item">
-          <p class="impact-item__tag">ДИПЛОМАТИЧНІ ДОКУМЕНТИ</p>
-          <h3>Генерація нот англійською та іспанською</h3>
-          <p>ШІ-конвеєр, що перетворює необроблені дані на офіційні аналітичні ноти у форматі, прийнятному для міжнародних місій.</p>
+          <p class="impact-item__tag" data-i18n="impact.i4.tag">ДИПЛОМАТИЧНІ ДОКУМЕНТИ</p>
+          <h3 data-i18n="impact.i4.h">Генерація нот англійською та іспанською</h3>
+          <p data-i18n="impact.i4.p">ШІ-конвеєр, що перетворює необроблені дані на офіційні аналітичні ноти у форматі, прийнятному для міжнародних місій.</p>
         </div>
         <div class="impact-item">
-          <p class="impact-item__tag">СИМУЛЯЦІЯ</p>
-          <h3>Моделювання кібервоєнних сценаріїв</h3>
-          <p>Побудова сценаріїв ескалації для стрес-тестування систем реагування — до того, як подія стається насправді.</p>
+          <p class="impact-item__tag" data-i18n="impact.i5.tag">СИМУЛЯЦІЯ</p>
+          <h3 data-i18n="impact.i5.h">Моделювання кібервоєнних сценаріїв</h3>
+          <p data-i18n="impact.i5.p">Побудова сценаріїв ескалації для стрес-тестування систем реагування — до того, як подія стається насправді.</p>
         </div>
       </div>
     </div>
@@ -524,10 +539,10 @@ body{padding-left:var(--rail);}
   <section class="sec shell" id="stack">
     <div class="sec__head">
       <div class="lift">
-        <p class="sec__index">Стек</p>
-        <h2 class="sec__title">Чотири напрями, один інженер</h2>
+        <p class="sec__index" data-i18n="stack.index">Стек</p>
+        <h2 class="sec__title" data-i18n="stack.title">Чотири напрями, один інженер</h2>
       </div>
-      <p class="sec__lead lift" data-delay="1">
+      <p class="sec__lead lift" data-delay="1" data-i18n="stack.lead">
         Кожен блок — це те, що я віддаю під ключ: від першого ескіза інтерфейсу
         до задеплоєного бекенду з документацією.
       </p>
@@ -535,31 +550,31 @@ body{padding-left:var(--rail);}
 
     <div class="stack">
       <article class="card lift">
-        <p class="card__k">Розробка</p>
-        <h3>Full-stack та AI-coding</h3>
-        <p>Продуктові вебзастосунки: від прототипу до продакшну з інтеграцією передових моделей у ядро продукту.</p>
+        <p class="card__k" data-i18n="stack.c1.k">Розробка</p>
+        <h3 data-i18n="stack.c1.h">Full-stack та AI-coding</h3>
+        <p data-i18n="stack.c1.p">Продуктові вебзастосунки: від прототипу до продакшну з інтеграцією передових моделей у ядро продукту.</p>
         <ul class="tags"><li>React</li><li>Next.js</li><li>TypeScript</li><li>Node</li><li>Vercel</li></ul>
       </article>
 
       <article class="card lift" data-delay="1">
-        <p class="card__k">Інтелект</p>
-        <h3>Архітектура систем на ШІ</h3>
-        <p>Проєктування пайплайнів, оптимізація промптів і вартості інференсу, робота з API та власною логікою агентів.</p>
-        <ul class="tags"><li>Python</li><li>Groq</li><li>LLM API</li><li>RAG</li><li>Оркестрація</li></ul>
+        <p class="card__k" data-i18n="stack.c2.k">Інтелект</p>
+        <h3 data-i18n="stack.c2.h">Архітектура систем на ШІ</h3>
+        <p data-i18n="stack.c2.p">Проєктування пайплайнів, оптимізація промптів і вартості інференсу, робота з API та власною логікою агентів.</p>
+        <ul class="tags"><li>Python</li><li>Groq</li><li>LLM API</li><li>RAG</li><li data-i18n="stack.c2.tag">Оркестрація</li></ul>
       </article>
 
       <article class="card lift" data-delay="2">
-        <p class="card__k">Інтерфейси</p>
-        <h3>UI/UX преміального рівня</h3>
-        <p>Інтерфейси, які виглядають дорого й не заважають працювати: дизайн-система, макети, готові до передачі в код.</p>
-        <ul class="tags"><li>Figma</li><li>Дизайн-системи</li><li>Прототипи</li><li>Адаптив</li></ul>
+        <p class="card__k" data-i18n="stack.c3.k">Інтерфейси</p>
+        <h3 data-i18n="stack.c3.h">UI/UX преміального рівня</h3>
+        <p data-i18n="stack.c3.p">Інтерфейси, які виглядають дорого й не заважають працювати: дизайн-система, макети, готові до передачі в код.</p>
+        <ul class="tags"><li>Figma</li><li data-i18n="stack.c3.tag1">Дизайн-системи</li><li data-i18n="stack.c3.tag2">Прототипи</li><li data-i18n="stack.c3.tag3">Адаптив</li></ul>
       </article>
 
       <article class="card lift" data-delay="3">
-        <p class="card__k">Автоматизація</p>
-        <h3>Кіберрозвідка й боти</h3>
-        <p>Збір і обробка відкритих даних, Telegram-боти, складні інтеграції API, контроль безпеки на рівні системи.</p>
-        <ul class="tags"><li>OSINT</li><li>Telegram Bot API</li><li>MITRE ATT&amp;CK</li><li>Парсинг</li></ul>
+        <p class="card__k" data-i18n="stack.c4.k">Автоматизація</p>
+        <h3 data-i18n="stack.c4.h">Кіберрозвідка й боти</h3>
+        <p data-i18n="stack.c4.p">Збір і обробка відкритих даних, Telegram-боти, складні інтеграції API, контроль безпеки на рівні системи.</p>
+        <ul class="tags"><li>OSINT</li><li>Telegram Bot API</li><li>MITRE ATT&amp;CK</li><li data-i18n="stack.c4.tag">Парсинг</li></ul>
       </article>
     </div>
   </section>
@@ -568,34 +583,34 @@ body{padding-left:var(--rail);}
   <section class="sec shell" id="terms">
     <div class="sec__head">
       <div class="lift">
-        <p class="sec__index">Умови</p>
-        <h2 class="sec__title">Три умови, які не обговорюються</h2>
+        <p class="sec__index" data-i18n="terms.index">Умови</p>
+        <h2 class="sec__title" data-i18n="terms.title">Три умови, які не обговорюються</h2>
       </div>
-      <p class="sec__lead lift" data-delay="1">
+      <p class="sec__lead lift" data-delay="1" data-i18n="terms.lead">
         Це фільтр, а не формальність. Якщо умови підходять — далі буде швидко й спокійно.
       </p>
     </div>
 
     <div class="terms">
       <div class="term lift">
-        <p class="term__label">50% передплати</p>
-        <p class="term__body">
+        <p class="term__label" data-i18n="terms.t1.label">50% передплати</p>
+        <p class="term__body" data-i18n-html="terms.t1.body">
           <b>Завжди, без винятків.</b> Тестових завдань «просто подивитися, як ви працюєте»
           не виконую. Портфоліо й розмова на 15 хвилин показують рівень краще за безкоштовний спринт.
         </p>
       </div>
 
       <div class="term lift" data-delay="1">
-        <p class="term__label">Результат без води</p>
-        <p class="term__body">
+        <p class="term__label" data-i18n="terms.t2.label">Результат без води</p>
+        <p class="term__body" data-i18n-html="terms.t2.body">
           <b>Дедлайн — це дата, а не побажання.</b> Статус видно на кожному етапі, а не в день здачі.
           Якщо щось піде не за планом, ви дізнаєтесь про це першим і завчасно.
         </p>
       </div>
 
       <div class="term lift" data-delay="2">
-        <p class="term__label">Чітко за ТЗ</p>
-        <p class="term__body">
+        <p class="term__label" data-i18n="terms.t3.label">Чітко за ТЗ</p>
+        <p class="term__body" data-i18n-html="terms.t3.body">
           <b>Робота за технічним завданням або через безпечну угоду.</b> На виході — чистий
           структурований код, документація й доступи, з якими ваша команда зможе жити без мене.
         </p>
@@ -605,31 +620,31 @@ body{padding-left:var(--rail);}
 
   <!-- CONTACT ----------------------------------------------- -->
   <section class="contact shell" id="contact">
-    <h2 class="lift">Є проєкт, який не можна провалити?</h2>
-    <p class="lift" data-delay="1">
+    <h2 class="lift" data-i18n="contact.title">Є проєкт, який не можна провалити?</h2>
+    <p class="lift" data-delay="1" data-i18n="contact.lead">
       Опишіть задачу в кількох реченнях — відповім оцінкою строків і того, чи беруся за неї взагалі.
     </p>
     <div class="contact__row lift" data-delay="2">
       <a class="btn btn--solid" data-magnet id="tg" href="#" target="_blank" rel="noopener">
-        <span class="btn__pulse"></span>Написати в Telegram
+        <span class="btn__pulse"></span><span data-i18n="contact.telegram">Написати в Telegram</span>
       </a>
-      <span class="contact__alt">або пошта — <a id="mail" href="#">пошта</a></span>
+      <span class="contact__alt"><span data-i18n="contact.orMail">або пошта — </span><a id="mail" href="#">пошта</a></span>
     </div>
   </section>
 
 </main>
 
 <footer class="foot shell">
-  <span>NS — Назар Семененко</span>
+  <span data-i18n="footer.name">NS — Назар Семененко</span>
   <span id="year">Zhytomyr / UA</span>
 </footer>
 
 <script>
 /* ============================================================
-   1. Контакти — змініть тут, і вони підставляться по всьому сайту
+   1. Контакти
    ============================================================ */
 const CONTACTS = {
-  telegram: "ceo_nazarka",         // без @
+  telegram: "ceo_nazarka",
   email: "manageroleksei@gmail.com"
 };
 
@@ -643,7 +658,221 @@ document.getElementById("year").textContent =
   "Zhytomyr / UA — " + new Date().getFullYear();
 
 /* ============================================================
-   2. Рухомий рядок (дублюємо контент для безшовної анімації)
+   2. i18n — переклад UA / EN
+   ============================================================ */
+const I18N = {
+  uk: {
+    "meta.desc": "Назар Семененко (NS) — архітектор цифрових систем і фахівець з кібербезпеки. OSINT, MITRE ATT&CK, ситуаційні центри кіберрозвідки та ШІ-інтеграція в критичну інфраструктуру. На шляху до UNODA.",
+    "nav.approach": "Підхід",
+    "nav.impact": "Вплив",
+    "nav.stack": "Стек",
+    "nav.terms": "Умови",
+    "nav.contact": "Контакт",
+    "nav.cta": "Обговорити проєкт",
+    "hero.name": "Назар Семененко",
+    "hero.title": "Інфраструктура безпеки за <em>тижні</em>, а не за квартали.",
+    "hero.role": "Digital Systems Architect & Cybersecurity Specialist",
+    "hero.aim": "Aiming for UNODA — Global Security Infrastructure",
+    "hero.manifesto": "Я проєктую архітектуру систем захисту й веду штучний інтелект як інженерну бригаду: аналіз загроз, інтеграція ШІ в критичну інфраструктуру та розробка високонадійних систем — на швидкості, недоступній командам, що працюють руками рядок за рядком.",
+    "hero.ctaTelegram": "Написати в Telegram",
+    "hero.ctaImpact": "Глобальний вплив",
+    "hero.fact1.dt": "Метод",
+    "hero.fact1.dd": "Людина-архітектор + ШІ",
+    "hero.fact2.dt": "Фокус",
+    "hero.fact2.dd": "OSINT, MITRE ATT&CK, ситуаційні центри",
+    "hero.fact3.dt": "Орієнтир",
+    "hero.fact3.dd": "UNODA — Нью-Йорк / Женева",
+    "approach.index": "Підхід",
+    "approach.title": "Людина-архітектор плюс штучний інтелект",
+    "approach.lead": "Інструмент не замінює інженера. Він прибирає з процесу все, що не є мисленням: рутину, бойлерплейт, пошук по документації.",
+    "approach.p1": "<strong>Архітектура — за людиною.</strong> Межі системи, модель даних, вимоги до безпеки, точки відмови й те, що станеться з проєктом на другий рік життя — це рішення, які я приймаю сам і за які відповідаю.",
+    "approach.p2": "<strong>Швидкість — за моделями.</strong> Реалізація, рефакторинг, тести, документація йдуть паралельними потоками. Я тримаю контекст і перевіряю кожен шар, а не приймаю згенероване на віру.",
+    "approach.eq1": "тиждень команди",
+    "approach.eq2": "день роботи",
+    "approach.p3": "Так побудовано HORIZON — власну систему моніторингу загроз із автоматизованим парсингом, прив'язкою до матриці MITRE ATT&CK і генерацією офіційних документів англійською та іспанською. Та сама дисципліна застосовується до комерційних замовлень будь-якого масштабу.",
+    "impact.index": "Глобальний вплив",
+    "impact.title": "Аналітика, що витримує рівень міжнародних місій",
+    "impact.lead": "Не блог про OSINT, а інфраструктура: збір даних, класифікація загроз і генерація документів, готових лягти на стіл дипломата.",
+    "impact.s1": "Три роки веду канали військової розвідки з відкритих джерел — щоденна верифікація, картування тактичних змін і фільтрація шуму у форматі, який витримує перевірку.",
+    "impact.s2": "HORIZON — система моніторингу загроз і ситуаційний центр кіберрозвідки на Python та Groq AI: автоматизований парсинг відкритих джерел, класифікація інцидентів за матрицею MITRE ATT&CK, симуляція кібервоєнних сценаріїв і генерація офіційних дипломатичних нот англійською та іспанською для міжнародних місій.",
+    "impact.i1.tag": "OSINT / РОЗВІДКА",
+    "impact.i1.h": "Три роки в полі",
+    "impact.i1.p": "Ведення каналів військової розвідки з відкритих джерел: верифікація, геолокація, побудова хронології подій без доступу до закритих каналів.",
+    "impact.i2.tag": "MITRE ATT&CK",
+    "impact.i2.h": "Структурована класифікація загроз",
+    "impact.i2.p": "Прив'язка інцидентів до тактик і технік матриці ATT&CK — той самий словник, яким користуються аналітики державних CERT.",
+    "impact.i3.tag": "СИТУАЦІЙНИЙ ЦЕНТР",
+    "impact.i3.h": "HORIZON: кіберрозвідка в реальному часі",
+    "impact.i3.p": "Автоматизований парсинг джерел, оцінка загроз і панель ситуаційної обізнаності — робоча інфраструктура, а не дашборд для демонстрації.",
+    "impact.i4.tag": "ДИПЛОМАТИЧНІ ДОКУМЕНТИ",
+    "impact.i4.h": "Генерація нот англійською та іспанською",
+    "impact.i4.p": "ШІ-конвеєр, що перетворює необроблені дані на офіційні аналітичні ноти у форматі, прийнятному для міжнародних місій.",
+    "impact.i5.tag": "СИМУЛЯЦІЯ",
+    "impact.i5.h": "Моделювання кібервоєнних сценаріїв",
+    "impact.i5.p": "Побудова сценаріїв ескалації для стрес-тестування систем реагування — до того, як подія стається насправді.",
+    "stack.index": "Стек",
+    "stack.title": "Чотири напрями, один інженер",
+    "stack.lead": "Кожен блок — це те, що я віддаю під ключ: від першого ескіза інтерфейсу до задеплоєного бекенду з документацією.",
+    "stack.c1.k": "Розробка",
+    "stack.c1.h": "Full-stack та AI-coding",
+    "stack.c1.p": "Продуктові вебзастосунки: від прототипу до продакшну з інтеграцією передових моделей у ядро продукту.",
+    "stack.c2.k": "Інтелект",
+    "stack.c2.h": "Архітектура систем на ШІ",
+    "stack.c2.p": "Проєктування пайплайнів, оптимізація промптів і вартості інференсу, робота з API та власною логікою агентів.",
+    "stack.c2.tag": "Оркестрація",
+    "stack.c3.k": "Інтерфейси",
+    "stack.c3.h": "UI/UX преміального рівня",
+    "stack.c3.p": "Інтерфейси, які виглядають дорого й не заважають працювати: дизайн-система, макети, готові до передачі в код.",
+    "stack.c3.tag1": "Дизайн-системи",
+    "stack.c3.tag2": "Прототипи",
+    "stack.c3.tag3": "Адаптив",
+    "stack.c4.k": "Автоматизація",
+    "stack.c4.h": "Кіберрозвідка й боти",
+    "stack.c4.p": "Збір і обробка відкритих даних, Telegram-боти, складні інтеграції API, контроль безпеки на рівні системи.",
+    "stack.c4.tag": "Парсинг",
+    "terms.index": "Умови",
+    "terms.title": "Три умови, які не обговорюються",
+    "terms.lead": "Це фільтр, а не формальність. Якщо умови підходять — далі буде швидко й спокійно.",
+    "terms.t1.label": "50% передплати",
+    "terms.t1.body": "<b>Завжди, без винятків.</b> Тестових завдань «просто подивитися, як ви працюєте» не виконую. Портфоліо й розмова на 15 хвилин показують рівень краще за безкоштовний спринт.",
+    "terms.t2.label": "Результат без води",
+    "terms.t2.body": "<b>Дедлайн — це дата, а не побажання.</b> Статус видно на кожному етапі, а не в день здачі. Якщо щось піде не за планом, ви дізнаєтесь про це першим і завчасно.",
+    "terms.t3.label": "Чітко за ТЗ",
+    "terms.t3.body": "<b>Робота за технічним завданням або через безпечну угоду.</b> На виході — чистий структурований код, документація й доступи, з якими ваша команда зможе жити без мене.",
+    "contact.title": "Є проєкт, який не можна провалити?",
+    "contact.lead": "Опишіть задачу в кількох реченнях — відповім оцінкою строків і того, чи беруся за неї взагалі.",
+    "contact.telegram": "Написати в Telegram",
+    "contact.orMail": "або пошта — ",
+    "footer.name": "NS — Назар Семененко"
+  },
+  en: {
+    "meta.desc": "Nazar Semenenko (NS) — Digital Systems Architect & Cybersecurity Specialist. OSINT, MITRE ATT&CK, cyber intelligence situation centers and AI integration into critical infrastructure. Aiming for UNODA.",
+    "nav.approach": "Approach",
+    "nav.impact": "Impact",
+    "nav.stack": "Stack",
+    "nav.terms": "Terms",
+    "nav.contact": "Contact",
+    "nav.cta": "Discuss a project",
+    "hero.name": "Nazar Semenenko",
+    "hero.title": "Security infrastructure in <em>weeks</em>, not quarters.",
+    "hero.role": "Digital Systems Architect & Cybersecurity Specialist",
+    "hero.aim": "Aiming for UNODA — Global Security Infrastructure",
+    "hero.manifesto": "I design protection system architecture and run artificial intelligence as an engineering brigade: threat analysis, AI integration into critical infrastructure, and high-reliability systems — at a speed unreachable by teams that write code line by line.",
+    "hero.ctaTelegram": "Message on Telegram",
+    "hero.ctaImpact": "Global impact",
+    "hero.fact1.dt": "Method",
+    "hero.fact1.dd": "Human architect + AI",
+    "hero.fact2.dt": "Focus",
+    "hero.fact2.dd": "OSINT, MITRE ATT&CK, situation centers",
+    "hero.fact3.dt": "Target",
+    "hero.fact3.dd": "UNODA — New York / Geneva",
+    "approach.index": "Approach",
+    "approach.title": "Human architect plus artificial intelligence",
+    "approach.lead": "The tool does not replace the engineer. It removes everything that is not thinking from the process: routine, boilerplate, documentation search.",
+    "approach.p1": "<strong>Architecture is human.</strong> System boundaries, data model, security requirements, failure points, and what happens to the project in year two — these are decisions I make and own.",
+    "approach.p2": "<strong>Speed is for the models.</strong> Implementation, refactoring, tests, and documentation run in parallel streams. I hold the context and verify every layer — I never take generated output on faith.",
+    "approach.eq1": "a team week",
+    "approach.eq2": "a day of work",
+    "approach.p3": "This is how HORIZON was built — a proprietary threat monitoring system with automated parsing, MITRE ATT&CK mapping, and generation of official documents in English and Spanish. The same discipline applies to commercial engagements of any scale.",
+    "impact.index": "Global impact",
+    "impact.title": "Analytics that meet the standard of international missions",
+    "impact.lead": "Not an OSINT blog, but infrastructure: data collection, threat classification, and generation of documents ready to land on a diplomat’s desk.",
+    "impact.s1": "For three years I have run open-source military intelligence channels — daily verification, mapping of tactical shifts, and noise filtering in a format that stands up to scrutiny.",
+    "impact.s2": "HORIZON is a threat monitoring system and cyber intelligence situation center on Python and Groq AI: automated open-source parsing, incident classification against the MITRE ATT&CK matrix, cyber-war scenario simulation, and generation of official diplomatic notes in English and Spanish for international missions.",
+    "impact.i1.tag": "OSINT / INTELLIGENCE",
+    "impact.i1.h": "Three years in the field",
+    "impact.i1.p": "Running open-source military intelligence channels: verification, geolocation, event chronology without access to closed sources.",
+    "impact.i2.tag": "MITRE ATT&CK",
+    "impact.i2.h": "Structured threat classification",
+    "impact.i2.p": "Mapping incidents to ATT&CK tactics and techniques — the same vocabulary used by national CERT analysts.",
+    "impact.i3.tag": "SITUATION CENTER",
+    "impact.i3.h": "HORIZON: real-time cyber intelligence",
+    "impact.i3.p": "Automated source parsing, threat assessment, and a situational awareness panel — working infrastructure, not a demo dashboard.",
+    "impact.i4.tag": "DIPLOMATIC DOCUMENTS",
+    "impact.i4.h": "Note generation in English and Spanish",
+    "impact.i4.p": "An AI pipeline that turns raw data into official analytical notes in a format acceptable to international missions.",
+    "impact.i5.tag": "SIMULATION",
+    "impact.i5.h": "Cyber-war scenario modeling",
+    "impact.i5.p": "Building escalation scenarios to stress-test response systems — before the event actually happens.",
+    "stack.index": "Stack",
+    "stack.title": "Four directions, one engineer",
+    "stack.lead": "Every block is delivered turnkey: from the first interface sketch to a deployed backend with documentation.",
+    "stack.c1.k": "Development",
+    "stack.c1.h": "Full-stack and AI-coding",
+    "stack.c1.p": "Product web applications: from prototype to production with advanced models integrated into the product core.",
+    "stack.c2.k": "Intelligence",
+    "stack.c2.h": "AI system architecture",
+    "stack.c2.p": "Pipeline design, prompt and inference cost optimization, API work and custom agent logic.",
+    "stack.c2.tag": "Orchestration",
+    "stack.c3.k": "Interfaces",
+    "stack.c3.h": "Premium UI/UX",
+    "stack.c3.p": "Interfaces that look expensive and never get in the way: design systems, layouts ready for hand-off to code.",
+    "stack.c3.tag1": "Design systems",
+    "stack.c3.tag2": "Prototypes",
+    "stack.c3.tag3": "Responsive",
+    "stack.c4.k": "Automation",
+    "stack.c4.h": "Cyber intelligence & bots",
+    "stack.c4.p": "Open data collection and processing, Telegram bots, complex API integrations, system-level security control.",
+    "stack.c4.tag": "Parsing",
+    "terms.index": "Terms",
+    "terms.title": "Three non-negotiable terms",
+    "terms.lead": "This is a filter, not a formality. If the terms fit — the rest will be fast and calm.",
+    "terms.t1.label": "50% upfront",
+    "terms.t1.body": "<b>Always, no exceptions.</b> I do not do test tasks “just to see how you work”. A portfolio and a 15-minute conversation show the level better than a free sprint.",
+    "terms.t2.label": "Results without fluff",
+    "terms.t2.body": "<b>A deadline is a date, not a wish.</b> Status is visible at every stage, not on delivery day. If something goes off plan, you hear about it first and early.",
+    "terms.t3.label": "Strictly by the brief",
+    "terms.t3.body": "<b>Work by technical specification or via a secure agreement.</b> You get clean structured code, documentation, and access so your team can live without me.",
+    "contact.title": "Have a project that cannot fail?",
+    "contact.lead": "Describe the task in a few sentences — I’ll reply with a timeline estimate and whether I take it on at all.",
+    "contact.telegram": "Message on Telegram",
+    "contact.orMail": "or email — ",
+    "footer.name": "NS — Nazar Semenenko"
+  }
+};
+
+function setLang(lang) {
+  const dict = I18N[lang] || I18N.uk;
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key] != null) el.textContent = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const key = el.getAttribute("data-i18n-html");
+    if (dict[key] != null) el.innerHTML = dict[key];
+  });
+
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc && dict["meta.desc"]) metaDesc.setAttribute("content", dict["meta.desc"]);
+
+  document.querySelectorAll("#langSwitch button").forEach(btn => {
+    btn.classList.toggle("is-active", btn.dataset.lang === lang);
+  });
+
+  try { localStorage.setItem("ns-lang", lang); } catch (_) {}
+}
+
+// Init language
+(function initLang() {
+  let lang = "uk";
+  try {
+    const saved = localStorage.getItem("ns-lang");
+    if (saved === "en" || saved === "uk") lang = saved;
+    else if (navigator.language && navigator.language.toLowerCase().startsWith("en")) lang = "en";
+  } catch (_) {}
+  setLang(lang);
+
+  document.getElementById("langSwitch").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-lang]");
+    if (btn) setLang(btn.dataset.lang);
+  });
+})();
+
+/* ============================================================
+   3. Рухомий рядок
    ============================================================ */
 const WORDS = ["Vibe-coding","Cyber intelligence","MITRE ATT&CK","AI architecture",
                "Full-stack","OSINT","Digital diplomacy","Automation"];
@@ -652,7 +881,7 @@ track.innerHTML = [...WORDS, ...WORDS]
   .map(w => `<span>${w} <b>/</b></span>`).join("");
 
 /* ============================================================
-   3. Прогрес читання + стан шапки
+   4. Прогрес читання + стан шапки
    ============================================================ */
 const bar = document.getElementById("progress");
 const topbar = document.getElementById("topbar");
@@ -670,7 +899,7 @@ addEventListener("scroll", () => {
 onScroll();
 
 /* ============================================================
-   4. Поява секцій при скролі
+   5. Поява секцій при скролі
    ============================================================ */
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
@@ -681,7 +910,7 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll(".lift").forEach(el => io.observe(el));
 
 /* ============================================================
-   5. Мікроінтерактив: світло на монограмі + магнітні кнопки
+   6. Мікроінтерактив: світло на монограмі + магнітні кнопки
    ============================================================ */
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fine = matchMedia("(pointer: fine)").matches;

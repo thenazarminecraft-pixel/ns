@@ -3,11 +3,22 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NS — Digital Systems Architect & Cybersecurity Specialist</title>
-<meta name="description" content="Назар Семененко (NS) — архітектор цифрових систем і фахівець з кібербезпеки. OSINT, MITRE ATT&CK, ситуаційні центри кіберрозвідки та ШІ-інтеграція в критичну інфраструктуру. На шляху до UNODA." />
+<title>NS — Назар Семененко | Digital Systems Architect & Cybersecurity Specialist</title>
+<meta name="description" content="Назар Семененко (NS) — архітектор цифрових систем і фахівець з кібербезпеки. OSINT, MITRE ATT&CK, ситуаційні центри кіберрозвідки (HORIZON) та ШІ-інтеграція в критичну інфраструктуру. На шляху до UNODA." />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Nazar Semenenko (NS)" />
+<meta name="theme-color" content="#000000" />
+<link rel="canonical" id="canonical" href="" />
 <meta property="og:title" content="NS — Digital Systems Architect & Cybersecurity Specialist" />
-<meta property="og:description" content="Aiming for UNODA / Global Security Infrastructure" />
+<meta property="og:description" content="Архітектура цифрових систем, кібербезпека, OSINT та AI-інтеграція. Автор HORIZON — системи моніторингу загроз. На шляху до UNODA." />
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="NS" />
+<meta property="og:locale" content="uk_UA" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="og:url" id="ogUrl" content="" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="NS — Digital Systems Architect & Cybersecurity Specialist" />
+<meta name="twitter:description" content="OSINT, MITRE ATT&CK, кіберрозвідка та AI-архітектура. Автор HORIZON. На шляху до UNODA." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet" />
@@ -160,32 +171,46 @@ body::after{
 }
 .hero__cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:46px;}
 
+/* hero system-status strip */
+.hero__sys{display:flex;flex-wrap:wrap;gap:16px 28px;margin:0 0 30px;padding:0;list-style:none;}
+.hero__sys li{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.16em;color:var(--fog);text-transform:uppercase;}
+.hero__sys li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);flex:none;animation:pulse-dot 2.6s ease-in-out infinite;}
+.hero__sys li:nth-child(2)::before{animation-delay:.4s;}
+.hero__sys li:nth-child(3)::before{animation-delay:.8s;}
+.hero__sys b{color:var(--paper);font-weight:600;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.35;}}
+
 .hero__facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line);}
 .hero__fact{background:var(--void);padding:20px 18px 0;}
 .hero__fact dt{font-size:11px;letter-spacing:.2em;color:var(--fog);margin-bottom:8px;}
 .hero__fact dd{margin:0;font-family:var(--f-display);font-weight:300;font-size:clamp(13px,1.15vw,16px);line-height:1.35;}
 
-/* monogram artwork */
+/* monogram artwork ------------------------------------------
+   Rendered as inline SVG. The spotlight reveal uses a native
+   SVG <mask> (radialGradient) applied to the gold <text>, kept
+   entirely separate from the outline <text> layer. This avoids
+   the Chromium rendering bug where combining CSS
+   `-webkit-background-clip:text` with a CSS `mask-image` on the
+   same element can drop partial-coverage pixels on curved glyph
+   segments (visible as a "hole" in the S, which has far more
+   curved edge than the straight-lined N). SVG's mask pipeline
+   composites text and mask as first-class primitives, so no
+   pixel-rounding seam appears on either letter.
+   ---------------------------------------------------------- */
 .monogram{position:relative;aspect-ratio:1/1;display:grid;place-items:center;}
-.monogram__type{
-  font-family:var(--f-display);font-weight:700;font-size:min(30vw,300px);line-height:1;
-  letter-spacing:-.06em;
-  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.22);
-  user-select:none;
+.monogram__svg{width:100%;height:100%;overflow:visible;}
+.monogram__outline{
+  font-family:var(--f-display);font-weight:700;font-size:min(26vw,260px);
+  letter-spacing:-.06em;fill:none;stroke:rgba(255,255,255,.22);stroke-width:1px;
+  paint-order:stroke;user-select:none;
 }
-.monogram__fill{
-  position:absolute;inset:0;display:grid;place-items:center;
-  font-family:var(--f-display);font-weight:700;font-size:min(30vw,300px);line-height:1;
-  letter-spacing:-.06em;
-  background:linear-gradient(140deg,var(--gold-hi),var(--gold) 45%,rgba(232,185,35,.15));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  -webkit-mask-image:radial-gradient(180px 180px at var(--mx,60%) var(--my,40%),#000 0%,transparent 72%);
-  mask-image:radial-gradient(180px 180px at var(--mx,60%) var(--my,40%),#000 0%,transparent 72%);
-  transition:opacity .4s ease;
+.monogram__gold{
+  font-family:var(--f-display);font-weight:700;font-size:min(26vw,260px);
+  letter-spacing:-.06em;user-select:none;
 }
 .monogram__ring{
   position:absolute;inset:6%;border:1px solid var(--line);border-radius:50%;
-  animation:spin 34s linear infinite;
+  animation:spin 34s linear infinite;pointer-events:none;
 }
 .monogram__ring::after{
   content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;
@@ -241,20 +266,22 @@ section{position:relative;z-index:2;}
 
 /* roadmap */
 .roadmap__line{
-  position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
   gap:clamp(18px,3vw,32px);padding-top:34px;
 }
 .roadmap__line::before{
   content:"";position:absolute;top:5px;left:0;right:0;height:1px;background:var(--line-strong);
 }
 .roadmap__line::after{
-  content:"";position:absolute;top:5px;left:0;width:var(--rm-progress,22%);height:1px;
+  content:"";position:absolute;top:5px;left:0;width:var(--rm-progress,0%);height:1px;
   background:var(--gold);box-shadow:0 0 10px var(--gold),0 0 26px rgba(232,185,35,.65);
+  transition:width .6s cubic-bezier(.2,.8,.2,1);
 }
 .stage{position:relative;padding-top:28px;}
 .stage::before{
   content:"";position:absolute;top:0;left:0;width:11px;height:11px;border-radius:50%;
   background:var(--void);border:2px solid var(--line-strong);
+  transition:border-color .5s ease,box-shadow .5s ease;
 }
 .stage[data-done="true"]::before{border-color:var(--gold);box-shadow:0 0 10px var(--gold),0 0 18px rgba(232,185,35,.5);}
 .stage__year{font-size:11px;letter-spacing:.2em;color:var(--gold);margin:0 0 12px;}
@@ -268,12 +295,53 @@ section{position:relative;z-index:2;}
   position:relative;transition:background .4s ease;
 }
 .card:hover{background:#0c0c0e;}
+.card__num{position:absolute;top:clamp(20px,2.6vw,32px);right:clamp(20px,2.6vw,32px);font-family:var(--f-display);font-size:12px;letter-spacing:.1em;color:var(--line-strong);transition:color .3s ease;}
+.card:hover .card__num{color:var(--gold);}
 .card__k{font-size:11px;letter-spacing:.24em;color:var(--gold);margin:0 0 20px;}
 .card h3{font-family:var(--f-display);font-weight:500;font-size:clamp(17px,1.7vw,23px);line-height:1.25;margin:0 0 14px;letter-spacing:-.01em;}
 .card p{margin:0 0 22px;color:var(--fog);font-weight:300;font-size:15px;max-width:44ch;}
-.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0;}
-.tags li{font-size:12px;letter-spacing:.06em;color:#b9b9be;border:1px solid var(--line);padding:5px 11px;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 20px;}
+.tags li{font-size:12px;letter-spacing:.06em;color:#b9b9be;border:1px solid var(--line);padding:5px 11px;transition:border-color .3s ease,color .3s ease;}
 .card:hover .tags li{border-color:var(--line-strong);}
+.card__link{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.04em;color:var(--fog);opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease,color .3s ease;}
+.card:hover .card__link{opacity:1;transform:none;}
+.card__link:hover{color:var(--gold);}
+
+/* case study (HORIZON) --------------------------------------- */
+.case{border:1px solid var(--line);padding:clamp(24px,3vw,40px);margin-top:clamp(28px,4vw,48px);}
+.case__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+.case__name{font-family:var(--f-display);font-weight:600;font-size:clamp(18px,2vw,24px);letter-spacing:-.01em;}
+.case__name span{color:var(--gold);}
+.case__tag{font-size:11px;letter-spacing:.18em;color:var(--fog);text-transform:uppercase;}
+.case__flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);}
+.case__stage{background:var(--void);padding:18px 16px 0;}
+.case__stage dt{font-size:10px;letter-spacing:.2em;color:var(--gold);margin-bottom:10px;}
+.case__stage dd{margin:0;font-size:13.5px;color:var(--fog);font-weight:300;line-height:1.5;}
+
+/* trust / competency band -------------------------------------- */
+.trust__grid{display:flex;flex-wrap:wrap;gap:10px;}
+.trust__grid li{
+  font-family:var(--f-display);font-size:13px;letter-spacing:.03em;color:var(--paper);
+  border:1px solid var(--line);padding:11px 18px;position:relative;transition:border-color .3s ease,color .3s ease;
+}
+.trust__grid li:hover{border-color:var(--gold);color:var(--gold);}
+
+/* faq ------------------------------------------------------------ */
+.faq{border-top:1px solid var(--line);}
+.faq__item{border-bottom:1px solid var(--line);}
+.faq__q{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  background:none;border:0;text-align:left;cursor:pointer;padding:22px 0;color:var(--paper);
+  font-family:var(--f-display);font-weight:500;font-size:clamp(14.5px,1.4vw,17px);letter-spacing:-.005em;
+}
+.faq__q-plus{position:relative;width:16px;height:16px;flex:none;}
+.faq__q-plus::before,.faq__q-plus::after{content:"";position:absolute;background:var(--gold);transition:transform .3s ease;}
+.faq__q-plus::before{top:50%;left:0;width:100%;height:1px;margin-top:-.5px;}
+.faq__q-plus::after{left:50%;top:0;height:100%;width:1px;margin-left:-.5px;}
+.faq__item[data-open="true"] .faq__q-plus::after{transform:rotate(90deg);opacity:0;}
+.faq__a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.2,.8,.2,1);}
+.faq__a p{margin:0 0 22px;color:var(--fog);font-weight:300;font-size:14.5px;max-width:60ch;}
+.faq__item[data-open="true"] .faq__a{max-height:220px;}
 
 /* terms */
 .terms{display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line);}
@@ -302,10 +370,15 @@ section{position:relative;z-index:2;}
 
 /* footer */
 .foot{
-  border-top:1px solid var(--line);padding-block:26px;
-  display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+  border-top:1px solid var(--line);padding-block:32px;
+  display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end;
   font-size:12px;color:var(--fog);letter-spacing:.06em;position:relative;z-index:2;
 }
+.foot__brand{font-family:var(--f-display);font-weight:600;font-size:14px;color:var(--paper);letter-spacing:.01em;}
+.foot__brand span{color:var(--gold);}
+.foot__role{display:block;margin-top:6px;font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--fog);letter-spacing:.03em;}
+.foot__meta{text-align:right;}
+.foot__meta span{display:block;}
 
 /* ============================================================
    entrance choreography
@@ -321,34 +394,70 @@ section{position:relative;z-index:2;}
 /* ============================================================
    responsive
    ============================================================ */
+
+/* ---- tablet / small laptop ---- */
 @media (max-width:1024px){
   .hero__grid{grid-template-columns:1fr;}
   .monogram{order:-1;aspect-ratio:2/1;}
-  .monogram__type,.monogram__fill{font-size:min(42vw,220px);}
+  .monogram__outline,.monogram__gold{font-size:min(38vw,190px);}
   .sec__head{grid-template-columns:1fr;align-items:start;}
   .approach{grid-template-columns:1fr;}
   .stack{grid-template-columns:1fr;}
   .impact-grid{grid-template-columns:1fr;}
   .roadmap__line{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px;}
+  .case__flow{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .case__stage:nth-child(1),.case__stage:nth-child(2){padding-bottom:18px;}
 }
+
+/* ---- phones / narrow tablets ---- */
 @media (max-width:760px){
   :root{--rail:0px;}
   .rail{display:none;}
   .topbar{left:0;}
   .topbar__nav{display:none;}
-  .topbar__actions{gap:12px;}
+  .topbar__actions{gap:10px;}
+  .topbar .btn{padding:10px 14px !important;font-size:12.5px !important;gap:8px;}
   .hero{padding-top:104px;}
   .hero__facts{grid-template-columns:1fr;}
   .hero__fact{padding:16px 0 0;}
+  .hero__sys{gap:10px 18px;}
   .term{grid-template-columns:1fr;}
   .hero__cta .btn,.contact__row .btn{width:100%;justify-content:center;}
   .contact__row{flex-direction:column;align-items:stretch;}
   .roadmap__line{grid-template-columns:1fr;gap:32px;padding-top:0;padding-left:22px;}
   .roadmap__line::before,.roadmap__line::after{top:0;bottom:0;left:5px;right:auto;width:1px;height:auto;}
-  .roadmap__line::after{height:var(--rm-progress-v,26%);width:1px;}
+  .roadmap__line::after{height:var(--rm-progress-v,0%);width:1px;transition:height .6s cubic-bezier(.2,.8,.2,1);}
   .stage{padding-top:0;padding-left:0;}
   .stage::before{top:2px;left:-22px;}
+  .case{padding:22px 18px;}
+  .case__flow{grid-template-columns:1fr 1fr;gap:1px;}
+  .case__head{flex-direction:column;align-items:flex-start;gap:6px;}
+  .trust__grid{gap:8px;}
+  .trust__grid li{font-size:12.5px;padding:9px 14px;}
+  .faq__q{padding:18px 0;gap:14px;}
+  .faq__item[data-open="true"] .faq__a{max-height:280px;}
+  .foot{flex-direction:column;align-items:flex-start;gap:14px;}
+  .foot__meta{text-align:left;}
 }
+
+/* ---- small phones ---- */
+@media (max-width:420px){
+  :root{--gutter:16px;}
+  .hero h1{max-width:none;}
+  .hero__name{letter-spacing:.22em;}
+  .hero__manifesto{padding-left:16px;}
+  .ticker span{font-size:12px;letter-spacing:.1em;}
+  .ticker__track{gap:28px;}
+  .case__flow{grid-template-columns:1fr;}
+  .case__stage{padding:14px 14px 14px;border-bottom:1px solid var(--line);}
+  .stack{border-inline:0;}
+  .contact h2{max-width:none;}
+  .faq__q{font-size:14px;}
+  .topbar__brand{font-size:14px;}
+  .topbar{flex-wrap:wrap;row-gap:10px;}
+  .lang-switch button{padding:6px 9px;}
+}
+
 body{padding-left:var(--rail);}
 
 @media (prefers-reduced-motion:reduce){
@@ -357,6 +466,38 @@ body{padding-left:var(--rail);}
   .lift{opacity:1;transform:none;}
 }
 </style>
+<script type="application/ld+json" id="jsonLdPerson">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Nazar Semenenko",
+  "alternateName": "NS",
+  "jobTitle": "Digital Systems Architect & Cybersecurity Specialist",
+  "description": "Architect of digital systems specializing in OSINT, MITRE ATT&CK-based threat classification, AI system architecture and full-stack development.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Zhytomyr",
+    "addressCountry": "UA"
+  },
+  "knowsAbout": ["OSINT", "MITRE ATT&CK", "Cybersecurity", "Artificial Intelligence", "Full-stack development", "Threat Intelligence", "UI/UX Design"],
+  "sameAs": ["https://t.me/ceo_nazarka"]
+}
+</script>
+<script type="application/ld+json" id="jsonLdService">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "NS — Nazar Semenenko",
+  "description": "Digital systems architecture, AI integration, cybersecurity and full-stack development services.",
+  "areaServed": "Worldwide",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Zhytomyr",
+    "addressCountry": "UA"
+  },
+  "knowsLanguage": ["uk", "en"]
+}
+</script>
 </head>
 <body>
 
@@ -409,6 +550,12 @@ body{padding-left:var(--rail);}
           систем — на швидкості, недоступній командам, що працюють руками рядок за рядком.
         </p>
 
+        <ul class="hero__sys lift" data-delay="4" aria-hidden="true">
+          <li data-i18n-html="hero.sys1">SYSTEM STATUS — <b>OPERATIONAL</b></li>
+          <li data-i18n-html="hero.sys2">AI PIPELINE — <b>ACTIVE</b></li>
+          <li data-i18n-html="hero.sys3">ACCESS — <b>BY REQUEST</b></li>
+        </ul>
+
         <div class="hero__cta lift" data-delay="5">
           <a class="btn btn--solid" data-magnet href="#contact"><span class="btn__pulse"></span><span data-i18n="hero.ctaTelegram">Написати в Telegram</span></a>
           <a class="btn btn--ghost" data-magnet href="#impact" data-i18n="hero.ctaImpact">Глобальний вплив</a>
@@ -423,8 +570,25 @@ body{padding-left:var(--rail);}
 
       <div class="monogram" id="monogram" aria-hidden="true">
         <div class="monogram__ring"></div>
-        <div class="monogram__type">NS</div>
-        <div class="monogram__fill" id="monogramFill">NS</div>
+        <svg class="monogram__svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="ns-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--gold-hi)" />
+              <stop offset="45%" stop-color="var(--gold)" />
+              <stop offset="100%" stop-color="rgba(232,185,35,.15)" />
+            </linearGradient>
+            <radialGradient id="ns-spot-grad" cx="60%" cy="40%" r="34%" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+              <stop offset="72%" stop-color="#fff" stop-opacity="1" />
+              <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+            </radialGradient>
+            <mask id="ns-spot-mask" maskContentUnits="objectBoundingBox" maskUnits="objectBoundingBox">
+              <rect x="0" y="0" width="1" height="1" fill="url(#ns-spot-grad)" />
+            </mask>
+          </defs>
+          <text class="monogram__outline" x="50%" y="58%" text-anchor="middle">NS</text>
+          <text class="monogram__gold" id="monogramGold" x="50%" y="58%" text-anchor="middle" fill="url(#ns-gold-grad)" mask="url(#ns-spot-mask)">NS</text>
+        </svg>
       </div>
     </div>
   </section>
@@ -531,6 +695,31 @@ body{padding-left:var(--rail);}
         </div>
       </div>
     </div>
+
+    <div class="case lift" data-delay="2">
+      <div class="case__head">
+        <p class="case__name">HORIZON — <span data-i18n="case.subtitle">Threat Intelligence System</span></p>
+        <p class="case__tag" data-i18n="case.tag">Selected system / 01</p>
+      </div>
+      <dl class="case__flow">
+        <div class="case__stage">
+          <dt data-i18n="case.input.dt">Input</dt>
+          <dd data-i18n="case.input.dd">Open sources</dd>
+        </div>
+        <div class="case__stage">
+          <dt data-i18n="case.process.dt">Process</dt>
+          <dd data-i18n="case.process.dd">Parsing → Classification → Analysis → AI</dd>
+        </div>
+        <div class="case__stage">
+          <dt data-i18n="case.output.dt">Output</dt>
+          <dd data-i18n="case.output.dd">Threat intelligence, reports, situational awareness</dd>
+        </div>
+        <div class="case__stage">
+          <dt data-i18n="case.tech.dt">Tech</dt>
+          <dd>Python / Groq AI / MITRE ATT&amp;CK</dd>
+        </div>
+      </dl>
+    </div>
   </section>
 
   <hr class="rule" />
@@ -550,33 +739,105 @@ body{padding-left:var(--rail);}
 
     <div class="stack">
       <article class="card lift">
+        <span class="card__num">01</span>
         <p class="card__k" data-i18n="stack.c1.k">Розробка</p>
         <h3 data-i18n="stack.c1.h">Full-stack та AI-coding</h3>
         <p data-i18n="stack.c1.p">Продуктові вебзастосунки: від прототипу до продакшну з інтеграцією передових моделей у ядро продукту.</p>
         <ul class="tags"><li>React</li><li>Next.js</li><li>TypeScript</li><li>Node</li><li>Vercel</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
       </article>
 
       <article class="card lift" data-delay="1">
+        <span class="card__num">02</span>
         <p class="card__k" data-i18n="stack.c2.k">Інтелект</p>
         <h3 data-i18n="stack.c2.h">Архітектура систем на ШІ</h3>
         <p data-i18n="stack.c2.p">Проєктування пайплайнів, оптимізація промптів і вартості інференсу, робота з API та власною логікою агентів.</p>
         <ul class="tags"><li>Python</li><li>Groq</li><li>LLM API</li><li>RAG</li><li data-i18n="stack.c2.tag">Оркестрація</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
       </article>
 
       <article class="card lift" data-delay="2">
+        <span class="card__num">03</span>
         <p class="card__k" data-i18n="stack.c3.k">Інтерфейси</p>
         <h3 data-i18n="stack.c3.h">UI/UX преміального рівня</h3>
         <p data-i18n="stack.c3.p">Інтерфейси, які виглядають дорого й не заважають працювати: дизайн-система, макети, готові до передачі в код.</p>
         <ul class="tags"><li>Figma</li><li data-i18n="stack.c3.tag1">Дизайн-системи</li><li data-i18n="stack.c3.tag2">Прототипи</li><li data-i18n="stack.c3.tag3">Адаптив</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
       </article>
 
       <article class="card lift" data-delay="3">
+        <span class="card__num">04</span>
         <p class="card__k" data-i18n="stack.c4.k">Автоматизація</p>
         <h3 data-i18n="stack.c4.h">Кіберрозвідка й боти</h3>
         <p data-i18n="stack.c4.p">Збір і обробка відкритих даних, Telegram-боти, складні інтеграції API, контроль безпеки на рівні системи.</p>
         <ul class="tags"><li>OSINT</li><li>Telegram Bot API</li><li>MITRE ATT&amp;CK</li><li data-i18n="stack.c4.tag">Парсинг</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
       </article>
     </div>
+  </section>
+
+  <!-- PROCESS ------------------------------------------------- -->
+  <section class="sec shell" id="process">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="process.index">Процес</p>
+        <h2 class="sec__title" data-i18n="process.title">Що відбувається після натискання кнопки</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="process.lead">
+        П'ять кроків від першого повідомлення до задеплоєної системи. Без сюрпризів по дорозі.
+      </p>
+    </div>
+
+    <div class="roadmap__line" id="roadmapLine">
+      <div class="stage lift">
+        <p class="stage__year">01</p>
+        <h3 data-i18n="process.s1.h">Discovery</h3>
+        <p data-i18n="process.s1.p">Розбір задачі, меж системи й ризиків. Чи взагалі варто це будувати саме так.</p>
+      </div>
+      <div class="stage lift" data-delay="1">
+        <p class="stage__year">02</p>
+        <h3 data-i18n="process.s2.h">Architecture</h3>
+        <p data-i18n="process.s2.p">Модель даних, стек, точки відмови, план безпеки — до того, як написано перший рядок коду.</p>
+      </div>
+      <div class="stage lift" data-delay="2">
+        <p class="stage__year">03</p>
+        <h3 data-i18n="process.s3.h">Build</h3>
+        <p data-i18n="process.s3.p">Реалізація паралельними потоками під моїм постійним контролем кожного шару.</p>
+      </div>
+      <div class="stage lift" data-delay="3">
+        <p class="stage__year">04</p>
+        <h3 data-i18n="process.s4.h">Test</h3>
+        <p data-i18n="process.s4.p">Перевірка на крайових випадках, безпека, продуктивність — перед тим, як показати вам.</p>
+      </div>
+      <div class="stage lift" data-delay="4">
+        <p class="stage__year">05</p>
+        <h3 data-i18n="process.s5.h">Deploy</h3>
+        <p data-i18n="process.s5.p">Розгортання, документація й доступи, з якими команда може жити без мене.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST / COMPETENCY --------------------------------------- -->
+  <section class="sec shell" id="trust">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="trust.index">Компетенції</p>
+        <h2 class="sec__title" data-i18n="trust.title">Словник, яким я користуюсь щодня</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="trust.lead">
+        Без вигаданих клієнтів, сертифікатів чи нагород — тільки те, з чим реально працюю.
+      </p>
+    </div>
+    <ul class="trust__grid lift" data-delay="1">
+      <li>OSINT</li>
+      <li>MITRE ATT&amp;CK</li>
+      <li>AI / LLM</li>
+      <li>Python</li>
+      <li>Full-stack</li>
+      <li>Automation</li>
+      <li>UI/UX</li>
+      <li>Cybersecurity</li>
+    </ul>
   </section>
 
   <!-- TERMS ------------------------------------------------- -->
@@ -618,11 +879,66 @@ body{padding-left:var(--rail);}
     </div>
   </section>
 
+  <!-- FAQ ------------------------------------------------------ -->
+  <section class="sec shell" id="faq">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="faq.index">FAQ</p>
+        <h2 class="sec__title" data-i18n="faq.title">Питання, які запитують найчастіше</h2>
+      </div>
+    </div>
+
+    <div class="faq lift" data-delay="1" id="faqList">
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q1">Що можна замовити?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a1">Веб-застосунки, AI-системи, автоматизацію, Telegram-ботів, дизайн-системи та інтеграції — від ідеї до задеплоєної системи.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q2">Як починається робота?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a2">З короткого опису задачі в Telegram або на пошту. У відповідь — оцінка строків і чи берусь я за проєкт взагалі.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q3">Чи працюєте з існуючим кодом?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a3">Так, якщо структура кодової бази дозволяє працювати без ризику для стабільності системи.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q4">Чи можна замовити AI-автоматизацію?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a4">Так — пайплайни на LLM API, обробка відкритих даних, боти й агентна логіка це основний профіль роботи.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q5">Як відбувається оплата?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a5">50% передплати перед стартом, решта — після здачі. Деталі узгоджуються за технічним завданням.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q6">Що я отримую після завершення?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a6">Чистий структурований код, документацію та доступи — команда зможе жити із системою без мене.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTACT ----------------------------------------------- -->
   <section class="contact shell" id="contact">
-    <h2 class="lift" data-i18n="contact.title">Є проєкт, який не можна провалити?</h2>
+    <h2 class="lift" data-i18n="contact.title">Є система, яку треба побудувати?</h2>
     <p class="lift" data-delay="1" data-i18n="contact.lead">
-      Опишіть задачу в кількох реченнях — відповім оцінкою строків і того, чи беруся за неї взагалі.
+      Опишіть задачу — я скажу, що можна побудувати, скільки це триватиме, і чи берусь я за неї взагалі.
     </p>
     <div class="contact__row lift" data-delay="2">
       <a class="btn btn--solid" data-magnet id="tg" href="#" target="_blank" rel="noopener">
@@ -635,8 +951,14 @@ body{padding-left:var(--rail);}
 </main>
 
 <footer class="foot shell">
-  <span data-i18n="footer.name">NS — Назар Семененко</span>
-  <span id="year">Zhytomyr / UA</span>
+  <div>
+    <p class="foot__brand">N<span>S</span> — <span data-i18n="footer.fullname">Назар Семененко</span></p>
+    <span class="foot__role" data-i18n="footer.role">Digital Systems Architect &amp; Cybersecurity Specialist</span>
+  </div>
+  <div class="foot__meta">
+    <span>Zhytomyr / UA</span>
+    <span id="year">© 2026 NS</span>
+  </div>
 </footer>
 
 <script>
@@ -655,7 +977,19 @@ mail.href = "mailto:" + CONTACTS.email;
 mail.textContent = CONTACTS.email;
 
 document.getElementById("year").textContent =
-  "Zhytomyr / UA — " + new Date().getFullYear();
+  "© " + new Date().getFullYear() + " NS";
+
+/* canonical / og:url — filled from the live location so the
+   markup never ships a guessed domain */
+(function setCanonical(){
+  try {
+    const href = location.origin + location.pathname;
+    const canon = document.getElementById("canonical");
+    const ogUrl = document.getElementById("ogUrl");
+    if (canon) canon.href = href;
+    if (ogUrl) ogUrl.setAttribute("content", href);
+  } catch (_) {}
+})();
 
 /* ============================================================
    2. i18n — переклад UA / EN
@@ -739,11 +1073,55 @@ const I18N = {
     "terms.t2.body": "<b>Дедлайн — це дата, а не побажання.</b> Статус видно на кожному етапі, а не в день здачі. Якщо щось піде не за планом, ви дізнаєтесь про це першим і завчасно.",
     "terms.t3.label": "Чітко за ТЗ",
     "terms.t3.body": "<b>Робота за технічним завданням або через безпечну угоду.</b> На виході — чистий структурований код, документація й доступи, з якими ваша команда зможе жити без мене.",
-    "contact.title": "Є проєкт, який не можна провалити?",
-    "contact.lead": "Опишіть задачу в кількох реченнях — відповім оцінкою строків і того, чи беруся за неї взагалі.",
+    "hero.sys1": "SYSTEM STATUS — <b>OPERATIONAL</b>",
+    "hero.sys2": "AI PIPELINE — <b>ACTIVE</b>",
+    "hero.sys3": "ACCESS — <b>BY REQUEST</b>",
+    "case.subtitle": "Система моніторингу загроз",
+    "case.tag": "Вибрана система / 01",
+    "case.input.dt": "Вхід",
+    "case.input.dd": "Відкриті джерела",
+    "case.process.dt": "Процес",
+    "case.process.dd": "Парсинг → Класифікація → Аналіз → ШІ",
+    "case.output.dt": "Вихід",
+    "case.output.dd": "Кіберрозвідка, звіти, ситуаційна обізнаність",
+    "case.tech.dt": "Стек",
+    "stack.cta": "Обговорити",
+    "process.index": "Процес",
+    "process.title": "Що відбувається після натискання кнопки",
+    "process.lead": "П'ять кроків від першого повідомлення до задеплоєної системи. Без сюрпризів по дорозі.",
+    "process.s1.h": "Discovery",
+    "process.s1.p": "Розбір задачі, меж системи й ризиків. Чи взагалі варто це будувати саме так.",
+    "process.s2.h": "Architecture",
+    "process.s2.p": "Модель даних, стек, точки відмови, план безпеки — до того, як написано перший рядок коду.",
+    "process.s3.h": "Build",
+    "process.s3.p": "Реалізація паралельними потоками під моїм постійним контролем кожного шару.",
+    "process.s4.h": "Test",
+    "process.s4.p": "Перевірка на крайових випадках, безпека, продуктивність — перед тим, як показати вам.",
+    "process.s5.h": "Deploy",
+    "process.s5.p": "Розгортання, документація й доступи, з якими команда може жити без мене.",
+    "trust.index": "Компетенції",
+    "trust.title": "Словник, яким я користуюсь щодня",
+    "trust.lead": "Без вигаданих клієнтів, сертифікатів чи нагород — тільки те, з чим реально працюю.",
+    "faq.index": "FAQ",
+    "faq.title": "Питання, які запитують найчастіше",
+    "faq.q1": "Що можна замовити?",
+    "faq.a1": "Веб-застосунки, AI-системи, автоматизацію, Telegram-ботів, дизайн-системи та інтеграції — від ідеї до задеплоєної системи.",
+    "faq.q2": "Як починається робота?",
+    "faq.a2": "З короткого опису задачі в Telegram або на пошту. У відповідь — оцінка строків і чи берусь я за проєкт взагалі.",
+    "faq.q3": "Чи працюєте з існуючим кодом?",
+    "faq.a3": "Так, якщо структура кодової бази дозволяє працювати без ризику для стабільності системи.",
+    "faq.q4": "Чи можна замовити AI-автоматизацію?",
+    "faq.a4": "Так — пайплайни на LLM API, обробка відкритих даних, боти й агентна логіка це основний профіль роботи.",
+    "faq.q5": "Як відбувається оплата?",
+    "faq.a5": "50% передплати перед стартом, решта — після здачі. Деталі узгоджуються за технічним завданням.",
+    "faq.q6": "Що я отримую після завершення?",
+    "faq.a6": "Чистий структурований код, документацію та доступи — команда зможе жити із системою без мене.",
+    "contact.title": "Є система, яку треба побудувати?",
+    "contact.lead": "Опишіть задачу — я скажу, що можна побудувати, скільки це триватиме, і чи берусь я за неї взагалі.",
     "contact.telegram": "Написати в Telegram",
     "contact.orMail": "або пошта — ",
-    "footer.name": "NS — Назар Семененко"
+    "footer.fullname": "Назар Семененко",
+    "footer.role": "Digital Systems Architect & Cybersecurity Specialist"
   },
   en: {
     "meta.desc": "Nazar Semenenko (NS) — Digital Systems Architect & Cybersecurity Specialist. OSINT, MITRE ATT&CK, cyber intelligence situation centers and AI integration into critical infrastructure. Aiming for UNODA.",
@@ -823,11 +1201,55 @@ const I18N = {
     "terms.t2.body": "<b>A deadline is a date, not a wish.</b> Status is visible at every stage, not on delivery day. If something goes off plan, you hear about it first and early.",
     "terms.t3.label": "Strictly by the brief",
     "terms.t3.body": "<b>Work by technical specification or via a secure agreement.</b> You get clean structured code, documentation, and access so your team can live without me.",
-    "contact.title": "Have a project that cannot fail?",
-    "contact.lead": "Describe the task in a few sentences — I’ll reply with a timeline estimate and whether I take it on at all.",
+    "hero.sys1": "SYSTEM STATUS — <b>OPERATIONAL</b>",
+    "hero.sys2": "AI PIPELINE — <b>ACTIVE</b>",
+    "hero.sys3": "ACCESS — <b>BY REQUEST</b>",
+    "case.subtitle": "Threat Intelligence System",
+    "case.tag": "Selected system / 01",
+    "case.input.dt": "Input",
+    "case.input.dd": "Open sources",
+    "case.process.dt": "Process",
+    "case.process.dd": "Parsing → Classification → Analysis → AI",
+    "case.output.dt": "Output",
+    "case.output.dd": "Threat intelligence, reports, situational awareness",
+    "case.tech.dt": "Tech",
+    "stack.cta": "Discuss",
+    "process.index": "Process",
+    "process.title": "What happens after you press the button",
+    "process.lead": "Five steps from the first message to a deployed system. No surprises along the way.",
+    "process.s1.h": "Discovery",
+    "process.s1.p": "Breaking down the task, system boundaries, and risks. Whether it's even worth building this way.",
+    "process.s2.h": "Architecture",
+    "process.s2.p": "Data model, stack, failure points, security plan — before a single line of code is written.",
+    "process.s3.h": "Build",
+    "process.s3.p": "Implementation runs in parallel streams under my continuous review of every layer.",
+    "process.s4.h": "Test",
+    "process.s4.p": "Edge cases, security, and performance checked before you ever see it.",
+    "process.s5.h": "Deploy",
+    "process.s5.p": "Rollout, documentation, and access your team can live with without me.",
+    "trust.index": "Competencies",
+    "trust.title": "The vocabulary I use every day",
+    "trust.lead": "No invented clients, certificates, or awards — only what I actually work with.",
+    "faq.index": "FAQ",
+    "faq.title": "The questions I get most often",
+    "faq.q1": "What can I hire you for?",
+    "faq.a1": "Web applications, AI systems, automation, Telegram bots, design systems, and integrations — from idea to deployed system.",
+    "faq.q2": "How does the work start?",
+    "faq.a2": "With a short description of the task on Telegram or email. I reply with a timeline estimate and whether I take the project on at all.",
+    "faq.q3": "Do you work with an existing codebase?",
+    "faq.a3": "Yes, as long as the codebase's structure allows working on it without risking the system's stability.",
+    "faq.q4": "Can I commission AI automation?",
+    "faq.a4": "Yes — LLM-API pipelines, open-data processing, bots, and agent logic are the core of the work.",
+    "faq.q5": "How does payment work?",
+    "faq.a5": "50% upfront before the start, the rest on delivery. Details are agreed on in the technical specification.",
+    "faq.q6": "What do I get once it's finished?",
+    "faq.a6": "Clean structured code, documentation, and access — your team can live with the system without me.",
+    "contact.title": "Have a system to build?",
+    "contact.lead": "Describe the problem — I'll tell you what can be built, how long it should take, and whether I'm the right person for it.",
     "contact.telegram": "Message on Telegram",
     "contact.orMail": "or email — ",
-    "footer.name": "NS — Nazar Semenenko"
+    "footer.fullname": "Nazar Semenenko",
+    "footer.role": "Digital Systems Architect & Cybersecurity Specialist"
   }
 };
 
@@ -910,6 +1332,58 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll(".lift").forEach(el => io.observe(el));
 
 /* ============================================================
+   FAQ accordion
+   ============================================================ */
+document.querySelectorAll("#faqList .faq__item").forEach(item => {
+  const btn = item.querySelector(".faq__q");
+  btn.addEventListener("click", () => {
+    const open = item.getAttribute("data-open") === "true";
+    document.querySelectorAll("#faqList .faq__item").forEach(i => i.setAttribute("data-open", "false"));
+    item.setAttribute("data-open", open ? "false" : "true");
+  });
+});
+
+/* ============================================================
+   Process — scroll-driven glow sweep (01 → 05)
+   ============================================================ */
+(function initRoadmapProgress(){
+  const line = document.getElementById("roadmapLine");
+  if (!line) return;
+  const stages = line.querySelectorAll(".stage");
+  let raf = null;
+
+  function update(){
+    raf = null;
+    const rect = line.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    // 0% when the line is still near the bottom of the viewport,
+    // 100% once it has scrolled up past the upper third — gives a
+    // smooth sweep as the section moves through view.
+    const start = vh * 0.88;
+    const end = vh * 0.28;
+    let p = (start - rect.top) / (start - end);
+    p = Math.min(1, Math.max(0, p));
+
+    line.style.setProperty("--rm-progress", (p * 100).toFixed(1) + "%");
+    line.style.setProperty("--rm-progress-v", (p * 100).toFixed(1) + "%");
+
+    stages.forEach((stage, i) => {
+      const threshold = (i + 0.5) / stages.length;
+      stage.dataset.done = p >= threshold ? "true" : "false";
+    });
+  }
+
+  function onScrollOrResize(){
+    if (raf) return;
+    raf = requestAnimationFrame(update);
+  }
+
+  addEventListener("scroll", onScrollOrResize, { passive:true });
+  addEventListener("resize", onScrollOrResize);
+  update();
+})();
+
+/* ============================================================
    6. Мікроінтерактив: світло на монограмі + магнітні кнопки
    ============================================================ */
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -917,12 +1391,14 @@ const fine = matchMedia("(pointer: fine)").matches;
 
 if (!reduced && fine){
   const mono = document.getElementById("monogram");
-  const fill = document.getElementById("monogramFill");
+  const spot = document.getElementById("ns-spot-grad");
 
   mono.addEventListener("pointermove", (e) => {
     const r = mono.getBoundingClientRect();
-    fill.style.setProperty("--mx", ((e.clientX - r.left) / r.width) * 100 + "%");
-    fill.style.setProperty("--my", ((e.clientY - r.top) / r.height) * 100 + "%");
+    const px = Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100));
+    const py = Math.min(100, Math.max(0, ((e.clientY - r.top) / r.height) * 100));
+    spot.setAttribute("cx", px + "%");
+    spot.setAttribute("cy", py + "%");
   });
 
   document.querySelectorAll("[data-magnet]").forEach(btn => {

@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NS — Назар Семененко | Digital Systems Architect & Cybersecurity Specialist</title>
+<meta name="description" content="Назар Семененко (NS) — архітектор цифрових систем і фахівець з кібербезпеки. OSINT, MITRE ATT&CK, ситуаційні центри кіберрозвідки (HORIZON) та ШІ-інтеграція в критичну інфраструктуру. На шляху до UNODA." />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Nazar Semenenko (NS)" />
+<meta name="theme-color" content="#000000" />
+<link rel="canonical" id="canonical" href="" />
+<meta property="og:title" content="NS — Digital Systems Architect & Cybersecurity Specialist" />
+<meta property="og:description" content="Архітектура цифрових систем, кібербезпека, OSINT та AI-інтеграція. Автор HORIZON — системи моніторингу загроз. На шляху до UNODA." />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="NS" />
+<meta property="og:locale" content="uk_UA" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="og:url" id="ogUrl" content="" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="NS — Digital Systems Architect & Cybersecurity Specialist" />
+<meta name="twitter:description" content="OSINT, MITRE ATT&CK, кіберрозвідка та AI-архітектура. Автор HORIZON. На шляху до UNODA." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   NS — design tokens
+   ============================================================ */
+:root{
+  color-scheme: dark;
+  --void:#000000;
+  --ink:#08080a;
+  --line:rgba(255,255,255,.10);
+  --line-strong:rgba(255,255,255,.22);
+  --gold:#e8b923;
+  --gold-hi:#ffd75e;
+  --fog:#8a8a90;
+  --paper:#f4f4f2;
+
+  --f-display:"Unbounded",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,sans-serif;
+
+  --gutter:clamp(20px,5vw,72px);
+  --rail:56px;
+  --maxw:1320px;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--paper);
+  font-family:var(--f-body);
+  font-weight:400;
+  font-size:clamp(15px,1.05vw,17px);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--gold);color:#000;}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px;}
+
+/* ambient grain + horizon glow ------------------------------ */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 520px at 78% -10%, rgba(232,185,35,.13), transparent 62%),
+    radial-gradient(700px 480px at 6% 108%, rgba(232,185,35,.06), transparent 60%);
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.6'/></svg>");
+}
+
+/* ============================================================
+   layout primitives
+   ============================================================ */
+.shell{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter);}
+.rule{height:1px;background:var(--line);border:0;margin:0;}
+
+.rail{
+  position:fixed;left:0;top:0;bottom:0;width:var(--rail);z-index:40;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:24px 0;border-right:1px solid var(--line);
+  background:rgba(0,0,0,.4);backdrop-filter:blur(6px);
+}
+.rail__mark{font-family:var(--f-display);font-weight:700;font-size:14px;letter-spacing:.04em;color:var(--gold);}
+.rail__meta{writing-mode:vertical-rl;font-size:11px;letter-spacing:.34em;color:var(--fog);}
+.rail__dot{width:5px;height:5px;background:var(--gold);border-radius:50%;box-shadow:0 0 14px var(--gold);}
+
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:60;box-shadow:0 0 16px rgba(232,185,35,.6);}
+
+/* ============================================================
+   header
+   ============================================================ */
+.topbar{
+  position:fixed;top:0;left:var(--rail);right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px;padding:18px var(--gutter);
+  transition:background .4s ease,padding .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+.topbar[data-stuck="true"]{background:rgba(0,0,0,.72);backdrop-filter:blur(14px);padding-block:12px;border-bottom-color:var(--line);}
+.topbar__brand{font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.02em;}
+.topbar__brand span{color:var(--gold);}
+.topbar__nav{display:flex;gap:28px;font-size:13px;color:var(--fog);}
+.topbar__nav a{position:relative;padding-block:4px;transition:color .25s ease;}
+.topbar__nav a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .3s cubic-bezier(.2,.8,.2,1);}
+.topbar__nav a:hover{color:var(--paper);}
+.topbar__nav a:hover::after{width:100%;}
+
+.topbar__actions{display:flex;align-items:center;gap:18px;}
+.lang-switch{display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden;font-size:12px;letter-spacing:.08em;}
+.lang-switch button{
+  background:transparent;border:0;color:var(--fog);padding:7px 11px;cursor:pointer;
+  font-family:var(--f-body);font-weight:500;transition:color .25s ease,background .25s ease;
+}
+.lang-switch button.is-active{background:var(--gold);color:#000;}
+.lang-switch button:not(.is-active):hover{color:var(--paper);}
+
+/* ============================================================
+   buttons
+   ============================================================ */
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:12px;
+  padding:16px 30px;font-size:14px;font-weight:600;letter-spacing:.01em;
+  border:1px solid var(--gold);overflow:hidden;isolation:isolate;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);
+  transition:color .3s ease,border-color .3s ease,transform .25s ease;
+  will-change:transform;
+}
+.btn::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:var(--gold);
+  transform:translateY(101%);transition:transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.btn:hover::before,.btn:focus-visible::before{transform:translateY(0);}
+.btn--solid{background:var(--gold);color:#000;}
+.btn--solid::before{background:var(--gold-hi);}
+.btn--ghost{color:var(--paper);border-color:var(--line-strong);}
+.btn--ghost:hover,.btn--ghost:focus-visible{color:#000;border-color:var(--gold);}
+.btn__pulse{width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+/* ============================================================
+   hero
+   ============================================================ */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding-top:120px;padding-bottom:64px;}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:center;width:100%;}
+
+.hero__name{
+  display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.3em;color:var(--fog);
+  margin:0 0 26px;
+}
+.hero__name::before{content:"";width:46px;height:1px;background:var(--gold);}
+
+.hero h1{
+  font-family:var(--f-display);font-weight:500;
+  font-size:clamp(34px,5.4vw,74px);line-height:1.02;letter-spacing:-.025em;
+  margin:0 0 26px;max-width:16ch;
+}
+.hero h1 em{font-style:normal;color:var(--gold);}
+
+.hero__status{display:flex;flex-direction:column;gap:7px;margin:0 0 30px;}
+.hero__status-role{font-size:clamp(12px,1.1vw,14px);letter-spacing:.14em;color:var(--gold);}
+.hero__status-aim{font-size:clamp(11px,1vw,13px);letter-spacing:.1em;color:var(--fog);}
+.hero__manifesto{
+  max-width:56ch;color:#c9c9cd;font-weight:300;font-size:clamp(15px,1.2vw,18px);
+  border-left:1px solid var(--line-strong);padding-left:22px;margin:0 0 40px;
+}
+.hero__cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:46px;}
+
+/* hero system-status strip */
+.hero__sys{display:flex;flex-wrap:wrap;gap:16px 28px;margin:0 0 30px;padding:0;list-style:none;}
+.hero__sys li{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.16em;color:var(--fog);text-transform:uppercase;}
+.hero__sys li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);flex:none;animation:pulse-dot 2.6s ease-in-out infinite;}
+.hero__sys li:nth-child(2)::before{animation-delay:.4s;}
+.hero__sys li:nth-child(3)::before{animation-delay:.8s;}
+.hero__sys b{color:var(--paper);font-weight:600;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+.hero__facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line);}
+.hero__fact{background:var(--void);padding:20px 18px 0;}
+.hero__fact dt{font-size:11px;letter-spacing:.2em;color:var(--fog);margin-bottom:8px;}
+.hero__fact dd{margin:0;font-family:var(--f-display);font-weight:300;font-size:clamp(13px,1.15vw,16px);line-height:1.35;}
+
+/* monogram artwork ------------------------------------------
+   Rendered as inline SVG. The spotlight reveal uses a native
+   SVG <mask> (radialGradient) applied to the gold <text>, kept
+   entirely separate from the outline <text> layer. This avoids
+   the Chromium rendering bug where combining CSS
+   `-webkit-background-clip:text` with a CSS `mask-image` on the
+   same element can drop partial-coverage pixels on curved glyph
+   segments (visible as a "hole" in the S, which has far more
+   curved edge than the straight-lined N). SVG's mask pipeline
+   composites text and mask as first-class primitives, so no
+   pixel-rounding seam appears on either letter.
+   ---------------------------------------------------------- */
+.monogram{position:relative;aspect-ratio:1/1;display:grid;place-items:center;}
+.monogram__svg{width:100%;height:100%;overflow:visible;}
+.monogram__outline{
+  font-family:var(--f-display);font-weight:700;font-size:min(26vw,260px);
+  letter-spacing:-.06em;fill:none;stroke:rgba(255,255,255,.22);stroke-width:1px;
+  paint-order:stroke;user-select:none;
+}
+.monogram__gold{
+  font-family:var(--f-display);font-weight:700;font-size:min(26vw,260px);
+  letter-spacing:-.06em;user-select:none;
+}
+.monogram__ring{
+  position:absolute;inset:6%;border:1px solid var(--line);border-radius:50%;
+  animation:spin 34s linear infinite;pointer-events:none;
+}
+.monogram__ring::after{
+  content:"";position:absolute;top:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;
+  background:var(--gold);border-radius:50%;box-shadow:0 0 18px var(--gold);
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ============================================================
+   ticker
+   ============================================================ */
+.ticker{border-block:1px solid var(--line);overflow:hidden;padding-block:16px;position:relative;z-index:2;background:var(--ink);}
+.ticker__track{display:flex;gap:44px;width:max-content;animation:slide 32s linear infinite;}
+.ticker span{font-family:var(--f-display);font-weight:300;font-size:clamp(12px,1.3vw,16px);letter-spacing:.16em;color:var(--fog);white-space:nowrap;}
+.ticker span b{color:var(--gold);font-weight:300;}
+@keyframes slide{to{transform:translateX(-50%);}}
+
+/* ============================================================
+   sections
+   ============================================================ */
+section{position:relative;z-index:2;}
+.sec{padding-block:clamp(72px,10vw,140px);}
+.sec__head{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,4vw,64px);align-items:end;margin-bottom:clamp(40px,5vw,72px);}
+.sec__title{font-family:var(--f-display);font-weight:500;font-size:clamp(26px,3.6vw,48px);line-height:1.1;letter-spacing:-.02em;margin:0;max-width:18ch;}
+.sec__lead{color:var(--fog);max-width:52ch;margin:0;font-weight:300;}
+.sec__index{font-size:11px;letter-spacing:.3em;color:var(--gold);margin:0 0 16px;}
+
+/* approach */
+.approach{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,4vw,64px);}
+.approach p{margin:0 0 18px;color:#c2c2c7;font-weight:300;max-width:60ch;}
+.approach strong{color:var(--paper);font-weight:600;}
+.equation{
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  font-family:var(--f-display);font-size:clamp(14px,1.5vw,20px);font-weight:300;
+}
+.equation i{font-style:normal;color:var(--gold);font-weight:500;}
+
+/* impact */
+.impact-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4vw,64px);}
+.impact-statement p{margin:0 0 20px;color:#c2c2c7;font-weight:300;max-width:48ch;border-left:1px solid var(--line-strong);padding-left:22px;}
+.impact-statement strong{color:var(--paper);font-weight:600;}
+.impact-list{display:flex;flex-direction:column;}
+.impact-item{position:relative;padding:22px 0 22px 26px;border-top:1px solid var(--line);}
+.impact-item:last-child{border-bottom:1px solid var(--line);}
+.impact-item::before{
+  content:"";position:absolute;left:0;top:22px;bottom:22px;width:2px;
+  background:var(--line-strong);transition:background .35s ease,box-shadow .35s ease;
+}
+.impact-item:hover::before{background:var(--gold);box-shadow:0 0 10px var(--gold),0 0 26px rgba(232,185,35,.55);}
+.impact-item__tag{font-family:var(--f-display);font-size:11px;letter-spacing:.18em;color:var(--gold);margin:0 0 9px;}
+.impact-item h3{font-family:var(--f-display);font-weight:500;font-size:clamp(16px,1.5vw,19px);margin:0 0 8px;letter-spacing:-.005em;}
+.impact-item p{margin:0;color:var(--fog);font-weight:300;font-size:14.5px;max-width:54ch;}
+
+/* roadmap */
+.roadmap__line{
+  position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:clamp(18px,3vw,32px);padding-top:34px;
+}
+.roadmap__line::before{
+  content:"";position:absolute;top:5px;left:0;right:0;height:1px;background:var(--line-strong);
+}
+.roadmap__line::after{
+  content:"";position:absolute;top:5px;left:0;width:var(--rm-progress,0%);height:1px;
+  background:var(--gold);box-shadow:0 0 10px var(--gold),0 0 26px rgba(232,185,35,.65);
+  transition:width .6s cubic-bezier(.2,.8,.2,1);
+}
+.stage{position:relative;padding-top:28px;}
+.stage::before{
+  content:"";position:absolute;top:0;left:0;width:11px;height:11px;border-radius:50%;
+  background:var(--void);border:2px solid var(--line-strong);
+  transition:border-color .5s ease,box-shadow .5s ease;
+}
+.stage[data-done="true"]::before{border-color:var(--gold);box-shadow:0 0 10px var(--gold),0 0 18px rgba(232,185,35,.5);}
+.stage__year{font-size:11px;letter-spacing:.2em;color:var(--gold);margin:0 0 12px;}
+.stage h3{font-family:var(--f-display);font-weight:500;font-size:clamp(15px,1.4vw,18px);margin:0 0 10px;letter-spacing:-.005em;max-width:20ch;}
+.stage p{margin:0;color:var(--fog);font-weight:300;font-size:14px;max-width:32ch;}
+
+/* stack */
+.stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+.card{
+  background:var(--void);padding:clamp(26px,3vw,44px);
+  position:relative;transition:background .4s ease;
+}
+.card:hover{background:#0c0c0e;}
+.card__num{position:absolute;top:clamp(20px,2.6vw,32px);right:clamp(20px,2.6vw,32px);font-family:var(--f-display);font-size:12px;letter-spacing:.1em;color:var(--line-strong);transition:color .3s ease;}
+.card:hover .card__num{color:var(--gold);}
+.card__k{font-size:11px;letter-spacing:.24em;color:var(--gold);margin:0 0 20px;}
+.card h3{font-family:var(--f-display);font-weight:500;font-size:clamp(17px,1.7vw,23px);line-height:1.25;margin:0 0 14px;letter-spacing:-.01em;}
+.card p{margin:0 0 22px;color:var(--fog);font-weight:300;font-size:15px;max-width:44ch;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 20px;}
+.tags li{font-size:12px;letter-spacing:.06em;color:#b9b9be;border:1px solid var(--line);padding:5px 11px;transition:border-color .3s ease,color .3s ease;}
+.card:hover .tags li{border-color:var(--line-strong);}
+.card__link{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.04em;color:var(--fog);opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease,color .3s ease;}
+.card:hover .card__link{opacity:1;transform:none;}
+.card__link:hover{color:var(--gold);}
+
+/* case study (HORIZON) --------------------------------------- */
+.case{border:1px solid var(--line);padding:clamp(24px,3vw,40px);margin-top:clamp(28px,4vw,48px);}
+.case__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+.case__name{font-family:var(--f-display);font-weight:600;font-size:clamp(18px,2vw,24px);letter-spacing:-.01em;}
+.case__name span{color:var(--gold);}
+.case__tag{font-size:11px;letter-spacing:.18em;color:var(--fog);text-transform:uppercase;}
+.case__flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);}
+.case__stage{background:var(--void);padding:18px 16px 0;}
+.case__stage dt{font-size:10px;letter-spacing:.2em;color:var(--gold);margin-bottom:10px;}
+.case__stage dd{margin:0;font-size:13.5px;color:var(--fog);font-weight:300;line-height:1.5;}
+
+/* ============================================================
+   PROJECTS — cinematic horizontal gallery
+   ============================================================ */
+
+/* sticky wrapper that pins during horizontal scroll */
+.projects-outer{
+  position:relative;
+  z-index:2;
+  background:var(--void);
+}
+.projects-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.projects-track-wrap{
+  flex:1;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  position:relative;
+}
+.projects-track{
+  display:flex;
+  gap:clamp(20px,2.4vw,36px);
+  padding-inline:clamp(20px,5vw,72px);
+  will-change:transform;
+  transition:transform .06s linear;
+}
+
+/* single project card */
+.proj{
+  flex:none;
+  width:clamp(280px,36vw,520px);
+  position:relative;
+  cursor:pointer;
+  border:1px solid var(--line);
+  overflow:hidden;
+  background:var(--ink);
+  transition:border-color .4s ease, box-shadow .4s ease;
+}
+.proj:hover{
+  border-color:var(--gold);
+  box-shadow:0 0 40px rgba(232,185,35,.14), inset 0 0 0 1px rgba(232,185,35,.08);
+}
+
+/* image wrapper with parallax inner */
+.proj__img-wrap{
+  position:relative;
+  width:100%;
+  height:clamp(180px,24vw,320px);
+  overflow:hidden;
+}
+.proj__img{
+  width:100%;
+  height:120%;
+  object-fit:cover;
+  display:block;
+  transform:translateY(0);
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+  filter:grayscale(18%) contrast(1.06);
+}
+.proj:hover .proj__img{
+  transform:translateY(-6%) scale(1.04);
+  filter:grayscale(0%) contrast(1.08);
+}
+
+/* scan-line cinematic overlay */
+.proj__img-wrap::after{
+  content:"";
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.04) 0px,
+    rgba(0,0,0,.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events:none;
+  z-index:2;
+}
+
+/* golden glint that sweeps on hover */
+.proj__glint{
+  position:absolute;top:0;left:-110%;width:60%;height:100%;
+  background:linear-gradient(105deg,transparent 40%,rgba(232,185,35,.18) 50%,transparent 60%);
+  pointer-events:none;z-index:3;
+  transition:left .55s cubic-bezier(.4,0,.2,1);
+}
+.proj:hover .proj__glint{left:130%;}
+
+/* index badge */
+.proj__num{
+  position:absolute;top:16px;left:16px;z-index:4;
+  font-family:var(--f-display);font-size:10px;letter-spacing:.22em;color:var(--gold);
+  background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
+  padding:5px 10px;border:1px solid rgba(232,185,35,.28);
+}
+
+/* category tag top-right */
+.proj__cat{
+  position:absolute;top:16px;right:16px;z-index:4;
+  font-size:10px;letter-spacing:.16em;color:var(--fog);
+  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
+  padding:5px 10px;border:1px solid var(--line);
+  text-transform:uppercase;
+  transition:color .3s, border-color .3s;
+}
+.proj:hover .proj__cat{color:var(--gold);border-color:rgba(232,185,35,.4);}
+
+/* body */
+.proj__body{
+  padding:22px 22px 20px;
+  border-top:1px solid var(--line);
+  transition:border-color .4s;
+}
+.proj:hover .proj__body{border-color:rgba(232,185,35,.3);}
+
+.proj__title{
+  font-family:var(--f-display);
+  font-weight:500;
+  font-size:clamp(14px,1.4vw,18px);
+  letter-spacing:-.01em;
+  margin:0 0 8px;
+  transition:color .3s;
+}
+.proj:hover .proj__title{color:var(--gold);}
+
+.proj__desc{
+  font-size:13px;
+  color:var(--fog);
+  font-weight:300;
+  line-height:1.55;
+  margin:0 0 16px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.proj__tags{
+  display:flex;flex-wrap:wrap;gap:6px;margin:0;
+  list-style:none;padding:0;
+}
+.proj__tags li{
+  font-size:10px;letter-spacing:.12em;color:var(--fog);
+  border:1px solid var(--line);padding:4px 9px;
+  transition:color .3s,border-color .3s;
+}
+.proj:hover .proj__tags li{color:var(--paper);border-color:var(--line-strong);}
+
+.proj__cta{
+  margin-top:16px;
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;letter-spacing:.1em;color:var(--gold);
+  font-family:var(--f-display);
+  opacity:0;transform:translateX(-8px);
+  transition:opacity .35s ease, transform .35s ease;
+}
+.proj:hover .proj__cta{opacity:1;transform:none;}
+.proj__cta-arrow{display:inline-block;transition:transform .3s;}
+.proj__cta:hover .proj__cta-arrow{transform:translateX(4px);}
+
+/* section header strip */
+.projects-header{
+  padding:clamp(24px,3.5vw,48px) clamp(20px,5vw,72px) clamp(14px,2vw,24px);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+  border-bottom:1px solid var(--line);
+  background:rgba(0,0,0,.0);
+  z-index:10;
+}
+.projects-header-left .sec__index{
+  margin:0 0 6px;
+}
+.projects-header-left .sec__title{
+  margin:0;
+  font-size:clamp(20px,2.6vw,34px);
+}
+.projects-progress{
+  display:flex;align-items:center;gap:12px;
+  font-size:12px;color:var(--fog);letter-spacing:.1em;
+}
+.projects-progress-bar{
+  width:120px;height:2px;
+  background:var(--line);
+  position:relative;overflow:hidden;
+  border-radius:1px;
+}
+.projects-progress-bar::after{
+  content:"";position:absolute;left:0;top:0;height:100%;
+  background:var(--gold);
+  width:var(--prog,0%);
+  transition:width .12s linear;
+  box-shadow:0 0 8px rgba(232,185,35,.6);
+}
+.projects-hint{
+  font-size:11px;letter-spacing:.1em;color:var(--fog);
+  display:flex;align-items:center;gap:8px;
+  opacity:.7;
+}
+.projects-hint svg{flex:none;animation:hintSlide 1.8s ease-in-out infinite;}
+@keyframes hintSlide{
+  0%,100%{transform:translateX(0);}
+  50%{transform:translateX(7px);}
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lb{
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:stretch;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .4s cubic-bezier(.2,.8,.2,1);
+}
+.lb.is-open{
+  pointer-events:auto;
+  opacity:1;
+}
+
+/* backdrop */
+.lb__bg{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.86);
+  backdrop-filter:blur(10px);
+}
+
+/* panel */
+.lb__panel{
+  position:relative;z-index:1;
+  margin:auto;
+  width:min(92vw,1060px);
+  max-height:92vh;
+  overflow-y:auto;
+  background:var(--ink);
+  border:1px solid var(--line-strong);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,.72fr);
+  transform:translateY(32px) scale(.97);
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.lb.is-open .lb__panel{
+  transform:none;
+}
+
+/* image side */
+.lb__img-col{
+  position:relative;
+  overflow:hidden;
+  min-height:340px;
+}
+.lb__img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  filter:grayscale(8%) contrast(1.06);
+}
+.lb__img-col::after{
+  content:"";
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.06) 0px,rgba(0,0,0,.06) 1px,
+    transparent 1px,transparent 3px
+  );
+  pointer-events:none;
+}
+.lb__badge{
+  position:absolute;top:18px;left:18px;
+  font-family:var(--f-display);font-size:10px;letter-spacing:.22em;
+  color:var(--gold);background:rgba(0,0,0,.8);backdrop-filter:blur(4px);
+  padding:6px 12px;border:1px solid rgba(232,185,35,.3);
+}
+
+/* info side */
+.lb__info{
+  padding:clamp(24px,3vw,44px);
+  display:flex;flex-direction:column;gap:0;
+  border-left:1px solid var(--line);
+}
+.lb__num{
+  font-family:var(--f-display);font-size:10px;letter-spacing:.3em;
+  color:var(--gold);margin:0 0 18px;
+}
+.lb__title{
+  font-family:var(--f-display);font-weight:500;
+  font-size:clamp(18px,2vw,26px);letter-spacing:-.01em;
+  margin:0 0 12px;
+}
+.lb__category{
+  font-size:11px;letter-spacing:.16em;color:var(--fog);
+  text-transform:uppercase;margin:0 0 20px;
+  padding-bottom:20px;border-bottom:1px solid var(--line);
+}
+.lb__desc{
+  font-size:14px;color:var(--fog);font-weight:300;line-height:1.7;
+  margin:0 0 24px;flex:1;
+}
+.lb__meta{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--line);border:1px solid var(--line);
+  margin:0 0 24px;
+}
+.lb__meta-item{
+  background:var(--ink);padding:12px 14px;
+}
+.lb__meta-item dt{
+  font-size:9px;letter-spacing:.22em;color:var(--gold);
+  margin-bottom:5px;text-transform:uppercase;
+}
+.lb__meta-item dd{
+  margin:0;font-size:12.5px;color:var(--fog);font-weight:300;line-height:1.4;
+}
+.lb__tags{
+  display:flex;flex-wrap:wrap;gap:6px;
+  list-style:none;padding:0;margin:0 0 24px;
+}
+.lb__tags li{
+  font-size:10px;letter-spacing:.12em;color:var(--fog);
+  border:1px solid var(--line);padding:5px 10px;
+}
+.lb__close{
+  position:absolute;top:18px;right:18px;z-index:10;
+  width:36px;height:36px;
+  background:rgba(0,0,0,.7);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fog);
+  transition:color .25s,border-color .25s;
+}
+.lb__close:hover{color:var(--gold);border-color:var(--gold);}
+
+/* prev / next nav */
+.lb__nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:10;
+  width:40px;height:40px;
+  background:rgba(0,0,0,.7);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--fog);
+  transition:color .25s,border-color .25s;
+}
+.lb__nav:hover{color:var(--gold);border-color:var(--gold);}
+.lb__prev{left:-20px;}
+.lb__next{right:-20px;}
+
+@media (max-width:760px){
+  .lb__panel{grid-template-columns:1fr;}
+  .lb__img-col{min-height:220px;}
+  .lb__info{border-left:none;border-top:1px solid var(--line);}
+  .lb__prev{left:8px;top:auto;bottom:8px;transform:none;}
+  .lb__next{right:8px;top:auto;bottom:8px;transform:none;}
+  .projects-track{padding-inline:clamp(20px,4vw,48px);}
+  .proj{width:clamp(260px,80vw,400px);}
+}
+@media (max-width:420px){
+  .projects-header{flex-direction:column;align-items:flex-start;gap:10px;}
+}
+
+/* trust / competency band -------------------------------------- */
+.trust__grid{display:flex;flex-wrap:wrap;gap:10px;}
+.trust__grid li{
+  font-family:var(--f-display);font-size:13px;letter-spacing:.03em;color:var(--paper);
+  border:1px solid var(--line);padding:11px 18px;position:relative;transition:border-color .3s ease,color .3s ease;
+}
+.trust__grid li:hover{border-color:var(--gold);color:var(--gold);}
+
+/* faq ------------------------------------------------------------ */
+.faq{border-top:1px solid var(--line);}
+.faq__item{border-bottom:1px solid var(--line);}
+.faq__q{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  background:none;border:0;text-align:left;cursor:pointer;padding:22px 0;color:var(--paper);
+  font-family:var(--f-display);font-weight:500;font-size:clamp(14.5px,1.4vw,17px);letter-spacing:-.005em;
+}
+.faq__q-plus{position:relative;width:16px;height:16px;flex:none;}
+.faq__q-plus::before,.faq__q-plus::after{content:"";position:absolute;background:var(--gold);transition:transform .3s ease;}
+.faq__q-plus::before{top:50%;left:0;width:100%;height:1px;margin-top:-.5px;}
+.faq__q-plus::after{left:50%;top:0;height:100%;width:1px;margin-left:-.5px;}
+.faq__item[data-open="true"] .faq__q-plus::after{transform:rotate(90deg);opacity:0;}
+.faq__a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.2,.8,.2,1);}
+.faq__a p{margin:0 0 22px;color:var(--fog);font-weight:300;font-size:14.5px;max-width:60ch;}
+.faq__item[data-open="true"] .faq__a{max-height:220px;}
+
+/* terms */
+.terms{display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line);}
+.term{
+  background:var(--void);display:grid;grid-template-columns:minmax(0,.38fr) minmax(0,1fr);
+  gap:clamp(16px,3vw,48px);padding:clamp(26px,3.2vw,44px) 0;align-items:start;
+  transition:padding-left .35s cubic-bezier(.2,.8,.2,1);
+}
+.term:hover{padding-left:14px;}
+.term__label{font-family:var(--f-display);font-weight:500;font-size:clamp(17px,1.8vw,24px);margin:0;letter-spacing:-.01em;}
+.term__label::before{content:"";display:block;width:34px;height:2px;background:var(--gold);margin-bottom:16px;}
+.term__body{margin:0;color:var(--fog);font-weight:300;max-width:58ch;}
+.term__body b{color:var(--paper);font-weight:600;}
+
+/* contact */
+.contact{padding-block:clamp(80px,11vw,160px);text-align:left;}
+.contact h2{
+  font-family:var(--f-display);font-weight:500;letter-spacing:-.03em;
+  font-size:clamp(30px,6.4vw,84px);line-height:1;margin:0 0 30px;max-width:14ch;
+}
+.contact p{color:var(--fog);max-width:46ch;font-weight:300;margin:0 0 40px;}
+.contact__row{display:flex;flex-wrap:wrap;gap:16px;align-items:center;}
+.contact__alt{font-size:14px;color:var(--fog);}
+.contact__alt a{border-bottom:1px solid var(--line-strong);padding-bottom:2px;transition:color .25s ease,border-color .25s ease;}
+.contact__alt a:hover{color:var(--gold);border-color:var(--gold);}
+
+/* footer */
+.foot{
+  border-top:1px solid var(--line);padding-block:32px;
+  display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end;
+  font-size:12px;color:var(--fog);letter-spacing:.06em;position:relative;z-index:2;
+}
+.foot__brand{font-family:var(--f-display);font-weight:600;font-size:14px;color:var(--paper);letter-spacing:.01em;}
+.foot__brand span{color:var(--gold);}
+.foot__role{display:block;margin-top:6px;font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--fog);letter-spacing:.03em;}
+.foot__meta{text-align:right;}
+.foot__meta span{display:block;}
+
+/* ============================================================
+   entrance choreography
+   ============================================================ */
+.lift{opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1);}
+.lift.is-in{opacity:1;transform:none;}
+[data-delay="1"]{transition-delay:.08s;}
+[data-delay="2"]{transition-delay:.16s;}
+[data-delay="3"]{transition-delay:.24s;}
+[data-delay="4"]{transition-delay:.32s;}
+[data-delay="5"]{transition-delay:.4s;}
+
+/* ============================================================
+   responsive
+   ============================================================ */
+
+/* ---- tablet / small laptop ---- */
+@media (max-width:1024px){
+  .hero__grid{grid-template-columns:1fr;}
+  .monogram{order:-1;aspect-ratio:2/1;}
+  .monogram__outline,.monogram__gold{font-size:min(38vw,190px);}
+  .sec__head{grid-template-columns:1fr;align-items:start;}
+  .approach{grid-template-columns:1fr;}
+  .stack{grid-template-columns:1fr;}
+  .impact-grid{grid-template-columns:1fr;}
+  .roadmap__line{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px;}
+  .case__flow{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .case__stage:nth-child(1),.case__stage:nth-child(2){padding-bottom:18px;}
+}
+
+/* ---- phones / narrow tablets ---- */
+@media (max-width:760px){
+  :root{--rail:0px;}
+  .rail{display:none;}
+  .topbar{left:0;}
+  .topbar__nav{display:none;}
+  .topbar__actions{gap:10px;}
+  .topbar .btn{padding:10px 14px !important;font-size:12.5px !important;gap:8px;}
+  .hero{padding-top:104px;}
+  .hero__facts{grid-template-columns:1fr;}
+  .hero__fact{padding:16px 0 0;}
+  .hero__sys{gap:10px 18px;}
+  .term{grid-template-columns:1fr;}
+  .hero__cta .btn,.contact__row .btn{width:100%;justify-content:center;}
+  .contact__row{flex-direction:column;align-items:stretch;}
+  .roadmap__line{grid-template-columns:1fr;gap:32px;padding-top:0;padding-left:22px;}
+  .roadmap__line::before,.roadmap__line::after{top:0;bottom:0;left:5px;right:auto;width:1px;height:auto;}
+  .roadmap__line::after{height:var(--rm-progress-v,0%);width:1px;transition:height .6s cubic-bezier(.2,.8,.2,1);}
+  .stage{padding-top:0;padding-left:0;}
+  .stage::before{top:2px;left:-22px;}
+  .case{padding:22px 18px;}
+  .case__flow{grid-template-columns:1fr 1fr;gap:1px;}
+  .case__head{flex-direction:column;align-items:flex-start;gap:6px;}
+  .trust__grid{gap:8px;}
+  .trust__grid li{font-size:12.5px;padding:9px 14px;}
+  .faq__q{padding:18px 0;gap:14px;}
+  .faq__item[data-open="true"] .faq__a{max-height:280px;}
+  .foot{flex-direction:column;align-items:flex-start;gap:14px;}
+  .foot__meta{text-align:left;}
+}
+
+/* ---- small phones ---- */
+@media (max-width:420px){
+  :root{--gutter:16px;}
+  .hero h1{max-width:none;}
+  .hero__name{letter-spacing:.22em;}
+  .hero__manifesto{padding-left:16px;}
+  .ticker span{font-size:12px;letter-spacing:.1em;}
+  .ticker__track{gap:28px;}
+  .case__flow{grid-template-columns:1fr;}
+  .case__stage{padding:14px 14px 14px;border-bottom:1px solid var(--line);}
+  .stack{border-inline:0;}
+  .contact h2{max-width:none;}
+  .faq__q{font-size:14px;}
+  .topbar__brand{font-size:14px;}
+  .topbar{flex-wrap:wrap;row-gap:10px;}
+  .lang-switch button{padding:6px 9px;}
+}
+
+body{padding-left:var(--rail);}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
+  html{scroll-behavior:auto;}
+  .lift{opacity:1;transform:none;}
+}
+</style>
+<script type="application/ld+json" id="jsonLdPerson">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Nazar Semenenko",
+  "alternateName": "NS",
+  "jobTitle": "Digital Systems Architect & Cybersecurity Specialist",
+  "description": "Architect of digital systems specializing in OSINT, MITRE ATT&CK-based threat classification, AI system architecture and full-stack development.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Zhytomyr",
+    "addressCountry": "UA"
+  },
+  "knowsAbout": ["OSINT", "MITRE ATT&CK", "Cybersecurity", "Artificial Intelligence", "Full-stack development", "Threat Intelligence", "UI/UX Design"],
+  "sameAs": ["https://t.me/ceo_nazarka"]
+}
+</script>
+<script type="application/ld+json" id="jsonLdService">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "NS — Nazar Semenenko",
+  "description": "Digital systems architecture, AI integration, cybersecurity and full-stack development services.",
+  "areaServed": "Worldwide",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Zhytomyr",
+    "addressCountry": "UA"
+  },
+  "knowsLanguage": ["uk", "en"]
+}
+</script>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<aside class="rail" aria-hidden="true">
+  <div class="rail__mark">NS</div>
+  <div class="rail__meta">ZHYTOMYR / UA</div>
+  <div class="rail__dot"></div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <a class="topbar__brand" href="#top">N<span>S</span></a>
+  <nav class="topbar__nav" aria-label="Sections">
+    <a href="#approach" data-i18n="nav.approach">Підхід</a>
+    <a href="#impact" data-i18n="nav.impact">Вплив</a>
+    <a href="#stack" data-i18n="nav.stack">Стек</a>
+    <a href="#projects" data-i18n="nav.projects">Проєкти</a>
+    <a href="#terms" data-i18n="nav.terms">Умови</a>
+    <a href="#contact" data-i18n="nav.contact">Контакт</a>
+  </nav>
+  <div class="topbar__actions">
+    <div class="lang-switch" id="langSwitch" aria-label="Language">
+      <button type="button" data-lang="uk" class="is-active">UA</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <a class="btn btn--solid" data-magnet href="#contact" style="padding:11px 20px;font-size:13px;" data-i18n="nav.cta">
+      Обговорити проєкт
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO ------------------------------------------------- -->
+  <section class="hero shell">
+    <div class="hero__grid">
+      <div>
+        <p class="hero__name lift" data-delay="1" data-i18n="hero.name">Назар Семененко</p>
+
+        <h1 class="lift" data-delay="2" data-i18n-html="hero.title">Інфраструктура безпеки за <em>тижні</em>, а не за квартали.</h1>
+
+        <p class="hero__status lift" data-delay="3">
+          <span class="hero__status-role" data-i18n="hero.role">Digital Systems Architect &amp; Cybersecurity Specialist</span>
+          <span class="hero__status-aim" data-i18n="hero.aim">Aiming for UNODA — Global Security Infrastructure</span>
+        </p>
+
+        <p class="hero__manifesto lift" data-delay="4" data-i18n="hero.manifesto">
+          Я проєктую архітектуру систем захисту й веду штучний інтелект як інженерну бригаду:
+          аналіз загроз, інтеграція ШІ в критичну інфраструктуру та розробка високонадійних
+          систем — на швидкості, недоступній командам, що працюють руками рядок за рядком.
+        </p>
+
+        <ul class="hero__sys lift" data-delay="4" aria-hidden="true">
+          <li data-i18n-html="hero.sys1">SYSTEM STATUS — <b>OPERATIONAL</b></li>
+          <li data-i18n-html="hero.sys2">AI PIPELINE — <b>ACTIVE</b></li>
+          <li data-i18n-html="hero.sys3">ACCESS — <b>BY REQUEST</b></li>
+        </ul>
+
+        <div class="hero__cta lift" data-delay="5">
+          <a class="btn btn--solid" data-magnet href="#contact"><span class="btn__pulse"></span><span data-i18n="hero.ctaTelegram">Написати в Telegram</span></a>
+          <a class="btn btn--ghost" data-magnet href="#impact" data-i18n="hero.ctaImpact">Глобальний вплив</a>
+        </div>
+
+        <dl class="hero__facts lift" data-delay="5">
+          <div class="hero__fact"><dt data-i18n="hero.fact1.dt">Метод</dt><dd data-i18n="hero.fact1.dd">Людина-архітектор + ШІ</dd></div>
+          <div class="hero__fact"><dt data-i18n="hero.fact2.dt">Фокус</dt><dd data-i18n="hero.fact2.dd">OSINT, MITRE ATT&amp;CK, ситуаційні центри</dd></div>
+          <div class="hero__fact"><dt data-i18n="hero.fact3.dt">Орієнтир</dt><dd data-i18n="hero.fact3.dd">UNODA — Нью-Йорк / Женева</dd></div>
+        </dl>
+      </div>
+
+      <div class="monogram" id="monogram" aria-hidden="true">
+        <div class="monogram__ring"></div>
+        <svg class="monogram__svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="ns-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--gold-hi)" />
+              <stop offset="45%" stop-color="var(--gold)" />
+              <stop offset="100%" stop-color="rgba(232,185,35,.15)" />
+            </linearGradient>
+            <radialGradient id="ns-spot-grad" cx="60%" cy="40%" r="34%" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+              <stop offset="72%" stop-color="#fff" stop-opacity="1" />
+              <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+            </radialGradient>
+            <mask id="ns-spot-mask" maskContentUnits="objectBoundingBox" maskUnits="objectBoundingBox">
+              <rect x="0" y="0" width="1" height="1" fill="url(#ns-spot-grad)" />
+            </mask>
+          </defs>
+          <text class="monogram__outline" x="50%" y="58%" text-anchor="middle">NS</text>
+          <text class="monogram__gold" id="monogramGold" x="50%" y="58%" text-anchor="middle" fill="url(#ns-gold-grad)" mask="url(#ns-spot-mask)">NS</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER ----------------------------------------------- -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track" id="tickerTrack"></div>
+  </div>
+
+  <!-- APPROACH --------------------------------------------- -->
+  <section class="sec shell" id="approach">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="approach.index">Підхід</p>
+        <h2 class="sec__title" data-i18n="approach.title">Людина-архітектор плюс штучний інтелект</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="approach.lead">
+        Інструмент не замінює інженера. Він прибирає з процесу все, що не є мисленням:
+        рутину, бойлерплейт, пошук по документації.
+      </p>
+    </div>
+
+    <div class="approach">
+      <div class="lift" data-delay="1">
+        <p data-i18n-html="approach.p1">
+          <strong>Архітектура — за людиною.</strong> Межі системи, модель даних, вимоги до безпеки,
+          точки відмови й те, що станеться з проєктом на другий рік життя — це рішення,
+          які я приймаю сам і за які відповідаю.
+        </p>
+        <p data-i18n-html="approach.p2">
+          <strong>Швидкість — за моделями.</strong> Реалізація, рефакторинг, тести, документація
+          йдуть паралельними потоками. Я тримаю контекст і перевіряю кожен шар, а не приймаю
+          згенероване на віру.
+        </p>
+      </div>
+      <div class="lift" data-delay="2">
+        <div class="equation">
+          <span data-i18n="approach.eq1">тиждень команди</span><i>→</i><span data-i18n="approach.eq2">день роботи</span>
+        </div>
+        <p style="margin-top:22px;" data-i18n="approach.p3">
+          Так побудовано HORIZON — власну систему моніторингу загроз із автоматизованим парсингом,
+          прив'язкою до матриці MITRE ATT&amp;CK і генерацією офіційних документів
+          англійською та іспанською. Та сама дисципліна застосовується до комерційних замовлень
+          будь-якого масштабу.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- IMPACT ------------------------------------------------- -->
+  <section class="sec shell" id="impact">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="impact.index">Глобальний вплив</p>
+        <h2 class="sec__title" data-i18n="impact.title">Аналітика, що витримує рівень міжнародних місій</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="impact.lead">
+        Не блог про OSINT, а інфраструктура: збір даних, класифікація загроз і генерація
+        документів, готових лягти на стіл дипломата.
+      </p>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-statement lift" data-delay="1">
+        <p data-i18n="impact.s1">
+          Три роки веду канали військової розвідки з відкритих джерел — щоденна верифікація,
+          картування тактичних змін і фільтрація шуму у форматі, який витримує перевірку.
+        </p>
+        <p data-i18n="impact.s2">
+          HORIZON — система моніторингу загроз і ситуаційний центр кіберрозвідки на
+          Python та Groq AI: автоматизований парсинг відкритих джерел, класифікація інцидентів
+          за матрицею MITRE ATT&amp;CK, симуляція кібервоєнних сценаріїв і генерація офіційних
+          дипломатичних нот англійською та іспанською для міжнародних місій.
+        </p>
+      </div>
+
+      <div class="impact-list lift" data-delay="2">
+        <div class="impact-item">
+          <p class="impact-item__tag" data-i18n="impact.i1.tag">OSINT / РОЗВІДКА</p>
+          <h3 data-i18n="impact.i1.h">Три роки в полі</h3>
+          <p data-i18n="impact.i1.p">Ведення каналів військової розвідки з відкритих джерел: верифікація, геолокація, побудова хронології подій без доступу до закритих каналів.</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-item__tag" data-i18n="impact.i2.tag">MITRE ATT&amp;CK</p>
+          <h3 data-i18n="impact.i2.h">Структурована класифікація загроз</h3>
+          <p data-i18n="impact.i2.p">Прив'язка інцидентів до тактик і технік матриці ATT&amp;CK — той самий словник, яким користуються аналітики державних CERT.</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-item__tag" data-i18n="impact.i3.tag">СИТУАЦІЙНИЙ ЦЕНТР</p>
+          <h3 data-i18n="impact.i3.h">HORIZON: кіберрозвідка в реальному часі</h3>
+          <p data-i18n="impact.i3.p">Автоматизований парсинг джерел, оцінка загроз і панель ситуаційної обізнаності — робоча інфраструктура, а не дашборд для демонстрації.</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-item__tag" data-i18n="impact.i4.tag">ДИПЛОМАТИЧНІ ДОКУМЕНТИ</p>
+          <h3 data-i18n="impact.i4.h">Генерація нот англійською та іспанською</h3>
+          <p data-i18n="impact.i4.p">ШІ-конвеєр, що перетворює необроблені дані на офіційні аналітичні ноти у форматі, прийнятному для міжнародних місій.</p>
+        </div>
+        <div class="impact-item">
+          <p class="impact-item__tag" data-i18n="impact.i5.tag">СИМУЛЯЦІЯ</p>
+          <h3 data-i18n="impact.i5.h">Моделювання кібервоєнних сценаріїв</h3>
+          <p data-i18n="impact.i5.p">Побудова сценаріїв ескалації для стрес-тестування систем реагування — до того, як подія стається насправді.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="case lift" data-delay="2">
+      <div class="case__head">
+        <p class="case__name">HORIZON — <span data-i18n="case.subtitle">Threat Intelligence System</span></p>
+        <p class="case__tag" data-i18n="case.tag">Selected system / 01</p>
+      </div>
+      <dl class="case__flow">
+        <div class="case__stage">
+          <dt data-i18n="case.input.dt">Input</dt>
+          <dd data-i18n="case.input.dd">Open sources</dd>
+        </div>
+        <div class="case__stage">
+          <dt data-i18n="case.process.dt">Process</dt>
+          <dd data-i18n="case.process.dd">Parsing → Classification → Analysis → AI</dd>
+        </div>
+        <div class="case__stage">
+          <dt data-i18n="case.output.dt">Output</dt>
+          <dd data-i18n="case.output.dd">Threat intelligence, reports, situational awareness</dd>
+        </div>
+        <div class="case__stage">
+          <dt data-i18n="case.tech.dt">Tech</dt>
+          <dd>Python / Groq AI / MITRE ATT&amp;CK</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- STACK ------------------------------------------------- -->
+  <section class="sec shell" id="stack">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="stack.index">Стек</p>
+        <h2 class="sec__title" data-i18n="stack.title">Чотири напрями, один інженер</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="stack.lead">
+        Кожен блок — це те, що я віддаю під ключ: від першого ескіза інтерфейсу
+        до задеплоєного бекенду з документацією.
+      </p>
+    </div>
+
+    <div class="stack">
+      <article class="card lift">
+        <span class="card__num">01</span>
+        <p class="card__k" data-i18n="stack.c1.k">Розробка</p>
+        <h3 data-i18n="stack.c1.h">Full-stack та AI-coding</h3>
+        <p data-i18n="stack.c1.p">Продуктові вебзастосунки: від прототипу до продакшну з інтеграцією передових моделей у ядро продукту.</p>
+        <ul class="tags"><li>React</li><li>Next.js</li><li>TypeScript</li><li>Node</li><li>Vercel</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
+      </article>
+
+      <article class="card lift" data-delay="1">
+        <span class="card__num">02</span>
+        <p class="card__k" data-i18n="stack.c2.k">Інтелект</p>
+        <h3 data-i18n="stack.c2.h">Архітектура систем на ШІ</h3>
+        <p data-i18n="stack.c2.p">Проєктування пайплайнів, оптимізація промптів і вартості інференсу, робота з API та власною логікою агентів.</p>
+        <ul class="tags"><li>Python</li><li>Groq</li><li>LLM API</li><li>RAG</li><li data-i18n="stack.c2.tag">Оркестрація</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
+      </article>
+
+      <article class="card lift" data-delay="2">
+        <span class="card__num">03</span>
+        <p class="card__k" data-i18n="stack.c3.k">Інтерфейси</p>
+        <h3 data-i18n="stack.c3.h">UI/UX преміального рівня</h3>
+        <p data-i18n="stack.c3.p">Інтерфейси, які виглядають дорого й не заважають працювати: дизайн-система, макети, готові до передачі в код.</p>
+        <ul class="tags"><li>Figma</li><li data-i18n="stack.c3.tag1">Дизайн-системи</li><li data-i18n="stack.c3.tag2">Прототипи</li><li data-i18n="stack.c3.tag3">Адаптив</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
+      </article>
+
+      <article class="card lift" data-delay="3">
+        <span class="card__num">04</span>
+        <p class="card__k" data-i18n="stack.c4.k">Автоматизація</p>
+        <h3 data-i18n="stack.c4.h">Кіберрозвідка й боти</h3>
+        <p data-i18n="stack.c4.p">Збір і обробка відкритих даних, Telegram-боти, складні інтеграції API, контроль безпеки на рівні системи.</p>
+        <ul class="tags"><li>OSINT</li><li>Telegram Bot API</li><li>MITRE ATT&amp;CK</li><li data-i18n="stack.c4.tag">Парсинг</li></ul>
+        <a class="card__link" href="#contact"><span data-i18n="stack.cta">Обговорити</span> →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- PROJECTS — cinematic gallery -------------------------------- -->
+  <div id="projects" class="projects-outer">
+    <div class="projects-sticky" id="projectsSticky">
+
+      <!-- header strip -->
+      <div class="projects-header">
+        <div class="projects-header-left">
+          <p class="sec__index" data-i18n="projects.index">Проєкти</p>
+          <h2 class="sec__title" data-i18n="projects.title">Вибрані роботи</h2>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+          <div class="projects-hint" aria-hidden="true">
+            <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+              <path d="M1 6h18M14 1l6 5-6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span data-i18n="projects.scroll">Скроль →</span>
+          </div>
+          <div class="projects-progress">
+            <div class="projects-progress-bar" id="projProgressBar"></div>
+            <span id="projCounter">01&thinsp;/&thinsp;06</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- horizontal track -->
+      <div class="projects-track-wrap">
+        <div class="projects-track" id="projTrack">
+
+          <!-- CARD 1: Інфографіка БпЛа/ракет -->
+          <article class="proj" data-proj="0">
+            <div class="proj__img-wrap">
+              <img class="proj__img" src="photos/alert map sr.jpg" alt="Інфографіка — Карта областей під загрозою" loading="lazy" />
+              <div class="proj__glint"></div>
+              <span class="proj__num" data-i18n="projects.p1.num">01 / 06</span>
+              <span class="proj__cat" data-i18n="projects.p1.cat">Інфографіка · Telegram</span>
+            </div>
+            <div class="proj__body">
+              <h3 class="proj__title" data-i18n="projects.p1.title">Карта загроз БпЛа/ракет</h3>
+              <p class="proj__desc" data-i18n="projects.p1.desc">Інфографіка для Telegram-каналу — карта областей, які можуть бути під загрозою БпЛа або ракет.</p>
+              <ul class="proj__tags"><li>Інфографіка</li><li>Telegram</li><li>GIS</li><li>Data Viz</li></ul>
+              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+            </div>
+          </article>
+
+          <!-- CARD 2: Карта руху цілей -->
+          <article class="proj" data-proj="1">
+            <div class="proj__img-wrap">
+              <img class="proj__img" src="photos/map sr.jpg" alt="Карта руху ворожих цілей" loading="lazy" />
+              <div class="proj__glint"></div>
+              <span class="proj__num" data-i18n="projects.p2.num">02 / 06</span>
+              <span class="proj__cat" data-i18n="projects.p2.cat">Інфографіка · Telegram</span>
+            </div>
+            <div class="proj__body">
+              <h3 class="proj__title" data-i18n="projects.p2.title">Карта руху ворожих цілей</h3>
+              <p class="proj__desc" data-i18n="projects.p2.desc">Інфографіка для Telegram-каналу — динамічна карта руху ворожих цілей у режимі реального часу.</p>
+              <ul class="proj__tags"><li>Інфографіка</li><li>Telegram</li><li>Real-time</li><li>GIS</li></ul>
+              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+            </div>
+          </article>
+
+          <!-- CARD 3: CASSANDRA -->
+          <article class="proj" data-proj="2">
+            <div class="proj__img-wrap">
+              <img class="proj__img" src="photos/cassandra.jpg" alt="CASSANDRA AI" loading="lazy" />
+              <div class="proj__glint"></div>
+              <span class="proj__num" data-i18n="projects.p3.num">03 / 06</span>
+              <span class="proj__cat" data-i18n="projects.p3.cat">AI · Automation</span>
+            </div>
+            <div class="proj__body">
+              <h3 class="proj__title" data-i18n="projects.p3.title">CASSANDRA</h3>
+              <p class="proj__desc" data-i18n="projects.p3.desc">Інтелектуальна система аналізу загроз на базі LLM з генерацією розвідувальних звітів документів.</p>
+              <ul class="proj__tags"><li>LLM API</li><li>Python</li><li>RAG</li><li>NLP</li></ul>
+              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+            </div>
+          </article>
+
+          <!-- CARD 4: COLLABIT -->
+          <article class="proj" data-proj="3">
+            <div class="proj__img-wrap">
+              <img class="proj__img" src="photos/collabit.png" alt="Collab IT — тренувальний проект" loading="lazy" />
+              <div class="proj__glint"></div>
+              <span class="proj__num" data-i18n="projects.p4.num">04 / 06</span>
+              <span class="proj__cat" data-i18n="projects.p4.cat">Full-stack · Training</span>
+            </div>
+            <div class="proj__body">
+              <h3 class="proj__title" data-i18n="projects.p4.title">Collab IT</h3>
+              <p class="proj__desc" data-i18n="projects.p4.desc">Тренувальний проект для компанії Collab IT — корпоративний застосунок із командними процесами та дашбордами.</p>
+              <ul class="proj__tags"><li>React</li><li>Node.js</li><li>TypeScript</li><li>WebSocket</li></ul>
+              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+            </div>
+          </article>
+
+          <!-- CARD 5: SOMA -->
+          <article class="proj" data-proj="4">
+            <div class="proj__img-wrap">
+              <img class="proj__img" src="photos/soma.jpg" alt="Тренувальний проект ресторану" loading="lazy" />
+              <div class="proj__glint"></div>
+              <span class="proj__num" data-i18n="projects.p5.num">05 / 06</span>
+              <span class="proj__cat" data-i18n="projects.p5.cat">UI/UX · Restaurant</span>
+            </div>
+            <div class="proj__body">
+              <h3 class="proj__title" data-i18n="projects.p5.title">Ресторан — SOMA</h3>
+              <p class="proj__desc" data-i18n="projects.p5.desc">Тренувальний проект сайту ресторану з преміальним дизайном, меню та системою онлайн-бронювання.</p>
+              <ul class="proj__tags"><li>Figma</li><li>Design System</li><li>Next.js</li><li>CSS</li></ul>
+              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+            </div>
+          </article>
+
+          <!-- CARD 6: STADNU -->
+          <article class="proj" data-proj="5">
+            <div class="proj__img-wrap">
+              <img class="proj__img" src="photos/stadnu.jpg" alt="Stadnu — шведська клінінгова компанія" loading="lazy" />
+              <div class="proj__glint"></div>
+              <span class="proj__num" data-i18n="projects.p6.num">06 / 06</span>
+              <span class="proj__cat" data-i18n="projects.p6.cat">Web · Sweden</span>
+            </div>
+            <div class="proj__body">
+              <h3 class="proj__title" data-i18n="projects.p6.title">Stadnu — Cleaning SE</h3>
+              <p class="proj__desc" data-i18n="projects.p6.desc">Проданий сайт для шведської компанії клінінгу та прибирання — повністю адаптивний, мультимовний.</p>
+              <ul class="proj__tags"><li>React</li><li>Next.js</li><li>i18n</li><li>Vercel</li></ul>
+              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+            </div>
+          </article>
+
+        </div><!-- /projects-track -->
+      </div><!-- /projects-track-wrap -->
+
+    </div><!-- /projects-sticky -->
+  </div><!-- /projects-outer -->
+
+  <!-- LIGHTBOX -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="lb__bg" id="lbBg"></div>
+    <div class="lb__panel">
+      <button class="lb__close" id="lbClose" aria-label="Close">&#10005;</button>
+      <button class="lb__nav lb__prev" id="lbPrev" aria-label="Previous">&#8592;</button>
+      <button class="lb__nav lb__next" id="lbNext" aria-label="Next">&#8594;</button>
+      <div class="lb__img-col">
+        <img class="lb__img" id="lbImg" src="" alt="" />
+        <span class="lb__badge" id="lbBadge">01 / 06</span>
+      </div>
+      <div class="lb__info">
+        <p class="lb__num" id="lbNum">01 / 06</p>
+        <h2 class="lb__title" id="lbTitle">Project</h2>
+        <p class="lb__category" id="lbCategory">Category</p>
+        <p class="lb__desc" id="lbDesc">Description</p>
+        <dl class="lb__meta" id="lbMeta"></dl>
+        <ul class="lb__tags" id="lbTags"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS ------------------------------------------------- -->
+  <section class="sec shell" id="process">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="process.index">Процес</p>
+        <h2 class="sec__title" data-i18n="process.title">Що відбувається після натискання кнопки</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="process.lead">
+        П'ять кроків від першого повідомлення до задеплоєної системи. Без сюрпризів по дорозі.
+      </p>
+    </div>
+
+    <div class="roadmap__line" id="roadmapLine">
+      <div class="stage lift">
+        <p class="stage__year">01</p>
+        <h3 data-i18n="process.s1.h">Discovery</h3>
+        <p data-i18n="process.s1.p">Розбір задачі, меж системи й ризиків. Чи взагалі варто це будувати саме так.</p>
+      </div>
+      <div class="stage lift" data-delay="1">
+        <p class="stage__year">02</p>
+        <h3 data-i18n="process.s2.h">Architecture</h3>
+        <p data-i18n="process.s2.p">Модель даних, стек, точки відмови, план безпеки — до того, як написано перший рядок коду.</p>
+      </div>
+      <div class="stage lift" data-delay="2">
+        <p class="stage__year">03</p>
+        <h3 data-i18n="process.s3.h">Build</h3>
+        <p data-i18n="process.s3.p">Реалізація паралельними потоками під моїм постійним контролем кожного шару.</p>
+      </div>
+      <div class="stage lift" data-delay="3">
+        <p class="stage__year">04</p>
+        <h3 data-i18n="process.s4.h">Test</h3>
+        <p data-i18n="process.s4.p">Перевірка на крайових випадках, безпека, продуктивність — перед тим, як показати вам.</p>
+      </div>
+      <div class="stage lift" data-delay="4">
+        <p class="stage__year">05</p>
+        <h3 data-i18n="process.s5.h">Deploy</h3>
+        <p data-i18n="process.s5.p">Розгортання, документація й доступи, з якими команда може жити без мене.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST / COMPETENCY --------------------------------------- -->
+  <section class="sec shell" id="trust">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="trust.index">Компетенції</p>
+        <h2 class="sec__title" data-i18n="trust.title">Словник, яким я користуюсь щодня</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="trust.lead">
+        Без вигаданих клієнтів, сертифікатів чи нагород — тільки те, з чим реально працюю.
+      </p>
+    </div>
+    <ul class="trust__grid lift" data-delay="1">
+      <li>OSINT</li>
+      <li>MITRE ATT&amp;CK</li>
+      <li>AI / LLM</li>
+      <li>Python</li>
+      <li>Full-stack</li>
+      <li>Automation</li>
+      <li>UI/UX</li>
+      <li>Cybersecurity</li>
+    </ul>
+  </section>
+
+  <!-- TERMS ------------------------------------------------- -->
+  <section class="sec shell" id="terms">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="terms.index">Умови</p>
+        <h2 class="sec__title" data-i18n="terms.title">Три умови, які не обговорюються</h2>
+      </div>
+      <p class="sec__lead lift" data-delay="1" data-i18n="terms.lead">
+        Це фільтр, а не формальність. Якщо умови підходять — далі буде швидко й спокійно.
+      </p>
+    </div>
+
+    <div class="terms">
+      <div class="term lift">
+        <p class="term__label" data-i18n="terms.t1.label">50% передплати</p>
+        <p class="term__body" data-i18n-html="terms.t1.body">
+          <b>Завжди, без винятків.</b> Тестових завдань «просто подивитися, як ви працюєте»
+          не виконую. Портфоліо й розмова на 15 хвилин показують рівень краще за безкоштовний спринт.
+        </p>
+      </div>
+
+      <div class="term lift" data-delay="1">
+        <p class="term__label" data-i18n="terms.t2.label">Результат без води</p>
+        <p class="term__body" data-i18n-html="terms.t2.body">
+          <b>Дедлайн — це дата, а не побажання.</b> Статус видно на кожному етапі, а не в день здачі.
+          Якщо щось піде не за планом, ви дізнаєтесь про це першим і завчасно.
+        </p>
+      </div>
+
+      <div class="term lift" data-delay="2">
+        <p class="term__label" data-i18n="terms.t3.label">Чітко за ТЗ</p>
+        <p class="term__body" data-i18n-html="terms.t3.body">
+          <b>Робота за технічним завданням або через безпечну угоду.</b> На виході — чистий
+          структурований код, документація й доступи, з якими ваша команда зможе жити без мене.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ ------------------------------------------------------ -->
+  <section class="sec shell" id="faq">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="faq.index">FAQ</p>
+        <h2 class="sec__title" data-i18n="faq.title">Питання, які запитують найчастіше</h2>
+      </div>
+    </div>
+
+    <div class="faq lift" data-delay="1" id="faqList">
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q1">Що можна замовити?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a1">Веб-застосунки, AI-системи, автоматизацію, Telegram-ботів, дизайн-системи та інтеграції — від ідеї до задеплоєної системи.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q2">Як починається робота?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a2">З короткого опису задачі в Telegram або на пошту. У відповідь — оцінка строків і чи берусь я за проєкт взагалі.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q3">Чи працюєте з існуючим кодом?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a3">Так, якщо структура кодової бази дозволяє працювати без ризику для стабільності системи.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q4">Чи можна замовити AI-автоматизацію?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a4">Так — пайплайни на LLM API, обробка відкритих даних, боти й агентна логіка це основний профіль роботи.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q5">Як відбувається оплата?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a5">50% передплати перед стартом, решта — після здачі. Деталі узгоджуються за технічним завданням.</p></div>
+      </div>
+      <div class="faq__item" data-open="false">
+        <button class="faq__q" type="button">
+          <span data-i18n="faq.q6">Що я отримую після завершення?</span>
+          <span class="faq__q-plus" aria-hidden="true"></span>
+        </button>
+        <div class="faq__a"><p data-i18n="faq.a6">Чистий структурований код, документацію та доступи — команда зможе жити із системою без мене.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT ----------------------------------------------- -->
+  <section class="contact shell" id="contact">
+    <h2 class="lift" data-i18n="contact.title">Є система, яку треба побудувати?</h2>
+    <p class="lift" data-delay="1" data-i18n="contact.lead">
+      Опишіть задачу — я скажу, що можна побудувати, скільки це триватиме, і чи берусь я за неї взагалі.
+    </p>
+    <div class="contact__row lift" data-delay="2">
+      <a class="btn btn--solid" data-magnet id="tg" href="#" target="_blank" rel="noopener">
+        <span class="btn__pulse"></span><span data-i18n="contact.telegram">Написати в Telegram</span>
+      </a>
+      <span class="contact__alt"><span data-i18n="contact.orMail">або пошта — </span><a id="mail" href="#">пошта</a></span>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot shell">
+  <div>
+    <p class="foot__brand">N<span>S</span> — <span data-i18n="footer.fullname">Назар Семененко</span></p>
+    <span class="foot__role" data-i18n="footer.role">Digital Systems Architect &amp; Cybersecurity Specialist</span>
+  </div>
+  <div class="foot__meta">
+    <span>Zhytomyr / UA</span>
+    <span id="year">© 2026 NS</span>
+    <span data-i18n="footer.rights">Всі права захищені.</span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   1. Контакти
+   ============================================================ */
+const CONTACTS = {
+  telegram: "ceo_nazarka",
+  email: "manageroleksei@gmail.com"
+};
+
+const tg = document.getElementById("tg");
+tg.href = "https://t.me/" + CONTACTS.telegram;
+const mail = document.getElementById("mail");
+mail.href = "mailto:" + CONTACTS.email;
+mail.textContent = CONTACTS.email;
+
+document.getElementById("year").textContent =
+  "© " + new Date().getFullYear() + " NS";
+
+/* canonical / og:url — filled from the live location so the
+   markup never ships a guessed domain */
+(function setCanonical(){
+  try {
+    const href = location.origin + location.pathname;
+    const canon = document.getElementById("canonical");
+    const ogUrl = document.getElementById("ogUrl");
+    if (canon) canon.href = href;
+    if (ogUrl) ogUrl.setAttribute("content", href);
+  } catch (_) {}
+})();
+
+/* ============================================================
+   2. i18n — переклад UA / EN
+   ============================================================ */
+const I18N = {
+  uk: {
+    "meta.desc": "Назар Семененко (NS) — архітектор цифрових систем і фахівець з кібербезпеки. OSINT, MITRE ATT&CK, ситуаційні центри кіберрозвідки та ШІ-інтеграція в критичну інфраструктуру. На шляху до UNODA.",
+    "nav.approach": "Підхід",
+    "nav.impact": "Вплив",
+    "nav.stack": "Стек",
+    "nav.terms": "Умови",
+    "nav.contact": "Контакт",
+    "nav.cta": "Обговорити проєкт",
+    "hero.name": "Назар Семененко",
+    "hero.title": "Інфраструктура безпеки за <em>тижні</em>, а не за квартали.",
+    "hero.role": "Digital Systems Architect & Cybersecurity Specialist",
+    "hero.aim": "Aiming for UNODA — Global Security Infrastructure",
+    "hero.manifesto": "Я проєктую архітектуру систем захисту й веду штучний інтелект як інженерну бригаду: аналіз загроз, інтеграція ШІ в критичну інфраструктуру та розробка високонадійних систем — на швидкості, недоступній командам, що працюють руками рядок за рядком.",
+    "hero.ctaTelegram": "Написати в Telegram",
+    "hero.ctaImpact": "Глобальний вплив",
+    "hero.fact1.dt": "Метод",
+    "hero.fact1.dd": "Людина-архітектор + ШІ",
+    "hero.fact2.dt": "Фокус",
+    "hero.fact2.dd": "OSINT, MITRE ATT&CK, ситуаційні центри",
+    "hero.fact3.dt": "Орієнтир",
+    "hero.fact3.dd": "UNODA — Нью-Йорк / Женева",
+    "approach.index": "Підхід",
+    "approach.title": "Людина-архітектор плюс штучний інтелект",
+    "approach.lead": "Інструмент не замінює інженера. Він прибирає з процесу все, що не є мисленням: рутину, бойлерплейт, пошук по документації.",
+    "approach.p1": "<strong>Архітектура — за людиною.</strong> Межі системи, модель даних, вимоги до безпеки, точки відмови й те, що станеться з проєктом на другий рік життя — це рішення, які я приймаю сам і за які відповідаю.",
+    "approach.p2": "<strong>Швидкість — за моделями.</strong> Реалізація, рефакторинг, тести, документація йдуть паралельними потоками. Я тримаю контекст і перевіряю кожен шар, а не приймаю згенероване на віру.",
+    "approach.eq1": "тиждень команди",
+    "approach.eq2": "день роботи",
+    "approach.p3": "Так побудовано HORIZON — власну систему моніторингу загроз із автоматизованим парсингом, прив'язкою до матриці MITRE ATT&CK і генерацією офіційних документів англійською та іспанською. Та сама дисципліна застосовується до комерційних замовлень будь-якого масштабу.",
+    "impact.index": "Глобальний вплив",
+    "impact.title": "Аналітика, що витримує рівень міжнародних місій",
+    "impact.lead": "Не блог про OSINT, а інфраструктура: збір даних, класифікація загроз і генерація документів, готових лягти на стіл дипломата.",
+    "impact.s1": "Три роки веду канали військової розвідки з відкритих джерел — щоденна верифікація, картування тактичних змін і фільтрація шуму у форматі, який витримує перевірку.",
+    "impact.s2": "HORIZON — система моніторингу загроз і ситуаційний центр кіберрозвідки на Python та Groq AI: автоматизований парсинг відкритих джерел, класифікація інцидентів за матрицею MITRE ATT&CK, симуляція кібервоєнних сценаріїв і генерація офіційних дипломатичних нот англійською та іспанською для міжнародних місій.",
+    "impact.i1.tag": "OSINT / РОЗВІДКА",
+    "impact.i1.h": "Три роки в полі",
+    "impact.i1.p": "Ведення каналів військової розвідки з відкритих джерел: верифікація, геолокація, побудова хронології подій без доступу до закритих каналів.",
+    "impact.i2.tag": "MITRE ATT&CK",
+    "impact.i2.h": "Структурована класифікація загроз",
+    "impact.i2.p": "Прив'язка інцидентів до тактик і технік матриці ATT&CK — той самий словник, яким користуються аналітики державних CERT.",
+    "impact.i3.tag": "СИТУАЦІЙНИЙ ЦЕНТР",
+    "impact.i3.h": "HORIZON: кіберрозвідка в реальному часі",
+    "impact.i3.p": "Автоматизований парсинг джерел, оцінка загроз і панель ситуаційної обізнаності — робоча інфраструктура, а не дашборд для демонстрації.",
+    "impact.i4.tag": "ДИПЛОМАТИЧНІ ДОКУМЕНТИ",
+    "impact.i4.h": "Генерація нот англійською та іспанською",
+    "impact.i4.p": "ШІ-конвеєр, що перетворює необроблені дані на офіційні аналітичні ноти у форматі, прийнятному для міжнародних місій.",
+    "impact.i5.tag": "СИМУЛЯЦІЯ",
+    "impact.i5.h": "Моделювання кібервоєнних сценаріїв",
+    "impact.i5.p": "Побудова сценаріїв ескалації для стрес-тестування систем реагування — до того, як подія стається насправді.",
+    "stack.index": "Стек",
+    "stack.title": "Чотири напрями, один інженер",
+    "stack.lead": "Кожен блок — це те, що я віддаю під ключ: від першого ескіза інтерфейсу до задеплоєного бекенду з документацією.",
+    "stack.c1.k": "Розробка",
+    "stack.c1.h": "Full-stack та AI-coding",
+    "stack.c1.p": "Продуктові вебзастосунки: від прототипу до продакшну з інтеграцією передових моделей у ядро продукту.",
+    "stack.c2.k": "Інтелект",
+    "stack.c2.h": "Архітектура систем на ШІ",
+    "stack.c2.p": "Проєктування пайплайнів, оптимізація промптів і вартості інференсу, робота з API та власною логікою агентів.",
+    "stack.c2.tag": "Оркестрація",
+    "stack.c3.k": "Інтерфейси",
+    "stack.c3.h": "UI/UX преміального рівня",
+    "stack.c3.p": "Інтерфейси, які виглядають дорого й не заважають працювати: дизайн-система, макети, готові до передачі в код.",
+    "stack.c3.tag1": "Дизайн-системи",
+    "stack.c3.tag2": "Прототипи",
+    "stack.c3.tag3": "Адаптив",
+    "stack.c4.k": "Автоматизація",
+    "stack.c4.h": "Кіберрозвідка й боти",
+    "stack.c4.p": "Збір і обробка відкритих даних, Telegram-боти, складні інтеграції API, контроль безпеки на рівні системи.",
+    "stack.c4.tag": "Парсинг",
+    "terms.index": "Умови",
+    "terms.title": "Три умови, які не обговорюються",
+    "terms.lead": "Це фільтр, а не формальність. Якщо умови підходять — далі буде швидко й спокійно.",
+    "terms.t1.label": "50% передплати",
+    "terms.t1.body": "<b>Завжди, без винятків.</b> Тестових завдань «просто подивитися, як ви працюєте» не виконую. Портфоліо й розмова на 15 хвилин показують рівень краще за безкоштовний спринт.",
+    "terms.t2.label": "Результат без води",
+    "terms.t2.body": "<b>Дедлайн — це дата, а не побажання.</b> Статус видно на кожному етапі, а не в день здачі. Якщо щось піде не за планом, ви дізнаєтесь про це першим і завчасно.",
+    "terms.t3.label": "Чітко за ТЗ",
+    "terms.t3.body": "<b>Робота за технічним завданням або через безпечну угоду.</b> На виході — чистий структурований код, документація й доступи, з якими ваша команда зможе жити без мене.",
+    "hero.sys1": "SYSTEM STATUS — <b>OPERATIONAL</b>",
+    "hero.sys2": "AI PIPELINE — <b>ACTIVE</b>",
+    "hero.sys3": "ACCESS — <b>BY REQUEST</b>",
+    "nav.projects": "Проєкти",
+    "projects.index": "Портфоліо",
+    "projects.title": "Шість систем, які працюють",
+    "projects.scroll": "Скроль →",
+    "projects.view": "Дивитись",
+    "projects.p1.num": "01 / 06",
+    "projects.p1.cat": "Інфографіка · Telegram",
+    "projects.p1.title": "Карта загроз БпЛа/ракет",
+    "projects.p1.desc": "Інфографіка для Telegram-каналу — карта областей, які можуть бути під загрозою БпЛа або ракетів.",
+    "projects.p1.role": "Дизайн, візуалізація",
+    "projects.p1.status": "Опубліковано",
+    "projects.p1.year": "2024",
+    "projects.p1.scope": "Telegram · GIS",
+    "projects.p2.num": "02 / 06",
+    "projects.p2.cat": "Інфографіка · Telegram",
+    "projects.p2.title": "Карта руху ворожих цілей",
+    "projects.p2.desc": "Інфографіка для Telegram-каналу — динамічна карта руху ворожих цілей у режимі реального часу.",
+    "projects.p2.role": "Дизайн, візуалізація",
+    "projects.p2.status": "Опубліковано",
+    "projects.p2.year": "2024",
+    "projects.p2.scope": "Telegram · Real-time",
+    "projects.p3.num": "03 / 06",
+    "projects.p3.cat": "AI · Automation",
+    "projects.p3.title": "CASSANDRA",
+    "projects.p3.desc": "Інтелектуальна система аналізу загроз на базі LLM з автоматичною генерацією розвідувальних документів.",
+    "projects.p3.role": "Архітектура + [ШІ пайплайн",
+    "projects.p3.status": "Бета, активний",
+    "projects.p3.year": "2025",
+    "projects.p3.scope": "AI · NLP · OSINT",
+    "projects.p4.num": "04 / 06",
+    "projects.p4.cat": "Full-stack · Training",
+    "projects.p4.title": "Collab IT",
+    "projects.p4.desc": "Тренувальний проект для компанії Collab IT — корпоративний застосунок із командними процесами та дашбордами.",
+    "projects.p4.role": "Full-stack розробка",
+    "projects.p4.status": "Тренувальний",
+    "projects.p4.year": "2024",
+    "projects.p4.scope": "Corporate · Training",
+    "projects.p5.num": "05 / 06",
+    "projects.p5.cat": "UI/UX · Restaurant",
+    "projects.p5.title": "Ресторан — SOMA",
+    "projects.p5.desc": "Тренувальний проект сайту ресторану з преміальним дизайном, меню та системою онлайн-бронювання.",
+    "projects.p5.role": "UI/UX + Front-end",
+    "projects.p5.status": "Тренувальний",
+    "projects.p5.year": "2024",
+    "projects.p5.scope": "Restaurant · UI/UX",
+    "projects.p6.num": "06 / 06",
+    "projects.p6.cat": "Web · Sweden",
+    "projects.p6.title": "Stadnu — Cleaning SE",
+    "projects.p6.desc": "Проданий сайт для шведської компанії клінінгу та прибирання — повністю адаптивний, мультимовний.",
+    "projects.p6.role": "Full-stack розробка",
+    "projects.p6.status": "Продано",
+    "projects.p6.year": "2024",
+    "projects.p6.scope": "Cleaning · Sweden",
+    "projects.lb.role": "Роль",
+    "projects.lb.status": "Статус",
+    "projects.lb.year": "Рік",
+    "projects.lb.scope": "Сфера",
+    "case.subtitle": "Система моніторингу загроз",
+    "case.tag": "Вибрана система / 01",
+    "case.input.dt": "Вхід",
+    "case.input.dd": "Відкриті джерела",
+    "case.process.dt": "Процес",
+    "case.process.dd": "Парсинг → Класифікація → Аналіз → ШІ",
+    "case.output.dt": "Вихід",
+    "case.output.dd": "Кіберрозвідка, звіти, ситуаційна обізнаність",
+    "case.tech.dt": "Стек",
+    "stack.cta": "Обговорити",
+    "process.index": "Процес",
+    "process.title": "Що відбувається після натискання кнопки",
+    "process.lead": "П'ять кроків від першого повідомлення до задеплоєної системи. Без сюрпризів по дорозі.",
+    "process.s1.h": "Discovery",
+    "process.s1.p": "Розбір задачі, меж системи й ризиків. Чи взагалі варто це будувати саме так.",
+    "process.s2.h": "Architecture",
+    "process.s2.p": "Модель даних, стек, точки відмови, план безпеки — до того, як написано перший рядок коду.",
+    "process.s3.h": "Build",
+    "process.s3.p": "Реалізація паралельними потоками під моїм постійним контролем кожного шару.",
+    "process.s4.h": "Test",
+    "process.s4.p": "Перевірка на крайових випадках, безпека, продуктивність — перед тим, як показати вам.",
+    "process.s5.h": "Deploy",
+    "process.s5.p": "Розгортання, документація й доступи, з якими команда може жити без мене.",
+    "trust.index": "Компетенції",
+    "trust.title": "Словник, яким я користуюсь щодня",
+    "trust.lead": "Без вигаданих клієнтів, сертифікатів чи нагород — тільки те, з чим реально працюю.",
+    "faq.index": "FAQ",
+    "faq.title": "Питання, які запитують найчастіше",
+    "faq.q1": "Що можна замовити?",
+    "faq.a1": "Веб-застосунки, AI-системи, автоматизацію, Telegram-ботів, дизайн-системи та інтеграції — від ідеї до задеплоєної системи.",
+    "faq.q2": "Як починається робота?",
+    "faq.a2": "З короткого опису задачі в Telegram або на пошту. У відповідь — оцінка строків і чи берусь я за проєкт взагалі.",
+    "faq.q3": "Чи працюєте з існуючим кодом?",
+    "faq.a3": "Так, якщо структура кодової бази дозволяє працювати без ризику для стабільності системи.",
+    "faq.q4": "Чи можна замовити AI-автоматизацію?",
+    "faq.a4": "Так — пайплайни на LLM API, обробка відкритих даних, боти й агентна логіка це основний профіль роботи.",
+    "faq.q5": "Як відбувається оплата?",
+    "faq.a5": "50% передплати перед стартом, решта — після здачі. Деталі узгоджуються за технічним завданням.",
+    "faq.q6": "Що я отримую після завершення?",
+    "faq.a6": "Чистий структурований код, документацію та доступи — команда зможе жити із системою без мене.",
+    "contact.title": "Є система, яку треба побудувати?",
+    "contact.lead": "Опишіть задачу — я скажу, що можна побудувати, скільки це триватиме, і чи берусь я за неї взагалі.",
+    "contact.telegram": "Написати в Telegram",
+    "contact.orMail": "або пошта — ",
+    "footer.fullname": "Назар Семененко",
+    "footer.role": "Digital Systems Architect & Cybersecurity Specialist",
+    "footer.rights": "Всі права захищені."
+  },
+  en: {
+    "meta.desc": "Nazar Semenenko (NS) — Digital Systems Architect & Cybersecurity Specialist. OSINT, MITRE ATT&CK, cyber intelligence situation centers and AI integration into critical infrastructure. Aiming for UNODA.",
+    "nav.approach": "Approach",
+    "nav.impact": "Impact",
+    "nav.stack": "Stack",
+    "nav.terms": "Terms",
+    "nav.contact": "Contact",
+    "nav.cta": "Discuss a project",
+    "hero.name": "Nazar Semenenko",
+    "hero.title": "Security infrastructure in <em>weeks</em>, not quarters.",
+    "hero.role": "Digital Systems Architect & Cybersecurity Specialist",
+    "hero.aim": "Aiming for UNODA — Global Security Infrastructure",
+    "hero.manifesto": "I design protection system architecture and run artificial intelligence as an engineering brigade: threat analysis, AI integration into critical infrastructure, and high-reliability systems — at a speed unreachable by teams that write code line by line.",
+    "hero.ctaTelegram": "Message on Telegram",
+    "hero.ctaImpact": "Global impact",
+    "hero.fact1.dt": "Method",
+    "hero.fact1.dd": "Human architect + AI",
+    "hero.fact2.dt": "Focus",
+    "hero.fact2.dd": "OSINT, MITRE ATT&CK, situation centers",
+    "hero.fact3.dt": "Target",
+    "hero.fact3.dd": "UNODA — New York / Geneva",
+    "approach.index": "Approach",
+    "approach.title": "Human architect plus artificial intelligence",
+    "approach.lead": "The tool does not replace the engineer. It removes everything that is not thinking from the process: routine, boilerplate, documentation search.",
+    "approach.p1": "<strong>Architecture is human.</strong> System boundaries, data model, security requirements, failure points, and what happens to the project in year two — these are decisions I make and own.",
+    "approach.p2": "<strong>Speed is for the models.</strong> Implementation, refactoring, tests, and documentation run in parallel streams. I hold the context and verify every layer — I never take generated output on faith.",
+    "approach.eq1": "a team week",
+    "approach.eq2": "a day of work",
+    "approach.p3": "This is how HORIZON was built — a proprietary threat monitoring system with automated parsing, MITRE ATT&CK mapping, and generation of official documents in English and Spanish. The same discipline applies to commercial engagements of any scale.",
+    "impact.index": "Global impact",
+    "impact.title": "Analytics that meet the standard of international missions",
+    "impact.lead": "Not an OSINT blog, but infrastructure: data collection, threat classification, and generation of documents ready to land on a diplomat’s desk.",
+    "impact.s1": "For three years I have run open-source military intelligence channels — daily verification, mapping of tactical shifts, and noise filtering in a format that stands up to scrutiny.",
+    "impact.s2": "HORIZON is a threat monitoring system and cyber intelligence situation center on Python and Groq AI: automated open-source parsing, incident classification against the MITRE ATT&CK matrix, cyber-war scenario simulation, and generation of official diplomatic notes in English and Spanish for international missions.",
+    "impact.i1.tag": "OSINT / INTELLIGENCE",
+    "impact.i1.h": "Three years in the field",
+    "impact.i1.p": "Running open-source military intelligence channels: verification, geolocation, event chronology without access to closed sources.",
+    "impact.i2.tag": "MITRE ATT&CK",
+    "impact.i2.h": "Structured threat classification",
+    "impact.i2.p": "Mapping incidents to ATT&CK tactics and techniques — the same vocabulary used by national CERT analysts.",
+    "impact.i3.tag": "SITUATION CENTER",
+    "impact.i3.h": "HORIZON: real-time cyber intelligence",
+    "impact.i3.p": "Automated source parsing, threat assessment, and a situational awareness panel — working infrastructure, not a demo dashboard.",
+    "impact.i4.tag": "DIPLOMATIC DOCUMENTS",
+    "impact.i4.h": "Note generation in English and Spanish",
+    "impact.i4.p": "An AI pipeline that turns raw data into official analytical notes in a format acceptable to international missions.",
+    "impact.i5.tag": "SIMULATION",
+    "impact.i5.h": "Cyber-war scenario modeling",
+    "impact.i5.p": "Building escalation scenarios to stress-test response systems — before the event actually happens.",
+    "stack.index": "Stack",
+    "stack.title": "Four directions, one engineer",
+    "stack.lead": "Every block is delivered turnkey: from the first interface sketch to a deployed backend with documentation.",
+    "stack.c1.k": "Development",
+    "stack.c1.h": "Full-stack and AI-coding",
+    "stack.c1.p": "Product web applications: from prototype to production with advanced models integrated into the product core.",
+    "stack.c2.k": "Intelligence",
+    "stack.c2.h": "AI system architecture",
+    "stack.c2.p": "Pipeline design, prompt and inference cost optimization, API work and custom agent logic.",
+    "stack.c2.tag": "Orchestration",
+    "stack.c3.k": "Interfaces",
+    "stack.c3.h": "Premium UI/UX",
+    "stack.c3.p": "Interfaces that look expensive and never get in the way: design systems, layouts ready for hand-off to code.",
+    "stack.c3.tag1": "Design systems",
+    "stack.c3.tag2": "Prototypes",
+    "stack.c3.tag3": "Responsive",
+    "stack.c4.k": "Automation",
+    "stack.c4.h": "Cyber intelligence & bots",
+    "stack.c4.p": "Open data collection and processing, Telegram bots, complex API integrations, system-level security control.",
+    "stack.c4.tag": "Parsing",
+    "terms.index": "Terms",
+    "terms.title": "Three non-negotiable terms",
+    "terms.lead": "This is a filter, not a formality. If the terms fit — the rest will be fast and calm.",
+    "terms.t1.label": "50% upfront",
+    "terms.t1.body": "<b>Always, no exceptions.</b> I do not do test tasks “just to see how you work”. A portfolio and a 15-minute conversation show the level better than a free sprint.",
+    "terms.t2.label": "Results without fluff",
+    "terms.t2.body": "<b>A deadline is a date, not a wish.</b> Status is visible at every stage, not on delivery day. If something goes off plan, you hear about it first and early.",
+    "terms.t3.label": "Strictly by the brief",
+    "terms.t3.body": "<b>Work by technical specification or via a secure agreement.</b> You get clean structured code, documentation, and access so your team can live without me.",
+    "hero.sys1": "SYSTEM STATUS — <b>OPERATIONAL</b>",
+    "hero.sys2": "AI PIPELINE — <b>ACTIVE</b>",
+    "hero.sys3": "ACCESS — <b>BY REQUEST</b>",
+    "nav.projects": "Projects",
+    "projects.index": "Portfolio",
+    "projects.title": "Six systems that work",
+    "projects.scroll": "Scroll →",
+    "projects.view": "View case",
+    "projects.p1.num": "01 / 06",
+    "projects.p1.cat": "Infographic · Telegram",
+    "projects.p1.title": "UAV/Missile Threat Map",
+    "projects.p1.desc": "Infographic for a Telegram channel — map of regions that may be under UAV or missile threat.",
+    "projects.p1.role": "Design, visualisation",
+    "projects.p1.status": "Published",
+    "projects.p1.year": "2024",
+    "projects.p1.scope": "Telegram · GIS",
+    "projects.p2.num": "02 / 06",
+    "projects.p2.cat": "Infographic · Telegram",
+    "projects.p2.title": "Enemy Target Movement Map",
+    "projects.p2.desc": "Infographic for a Telegram channel — real-time dynamic map of enemy target movements.",
+    "projects.p2.role": "Design, visualisation",
+    "projects.p2.status": "Published",
+    "projects.p2.year": "2024",
+    "projects.p2.scope": "Telegram · Real-time",
+    "projects.p3.num": "03 / 06",
+    "projects.p3.cat": "AI · Automation",
+    "projects.p3.title": "CASSANDRA",
+    "projects.p3.desc": "LLM-powered threat analysis system with automated generation of intelligence reports.",
+    "projects.p3.role": "Architecture + AI pipeline",
+    "projects.p3.status": "Beta, active",
+    "projects.p3.year": "2025",
+    "projects.p3.scope": "AI · NLP · OSINT",
+    "projects.p4.num": "04 / 06",
+    "projects.p4.cat": "Full-stack · Training",
+    "projects.p4.title": "Collab IT",
+    "projects.p4.desc": "Training project for Collab IT — corporate web app with team workflows and dashboards.",
+    "projects.p4.role": "Full-stack development",
+    "projects.p4.status": "Training",
+    "projects.p4.year": "2024",
+    "projects.p4.scope": "Corporate · Training",
+    "projects.p5.num": "05 / 06",
+    "projects.p5.cat": "UI/UX · Restaurant",
+    "projects.p5.title": "Restaurant — SOMA",
+    "projects.p5.desc": "Training project for a restaurant — premium design with menu and online booking system.",
+    "projects.p5.role": "UI/UX + Front-end",
+    "projects.p5.status": "Training",
+    "projects.p5.year": "2024",
+    "projects.p5.scope": "Restaurant · UI/UX",
+    "projects.p6.num": "06 / 06",
+    "projects.p6.cat": "Web · Sweden",
+    "projects.p6.title": "Stadnu — Cleaning SE",
+    "projects.p6.desc": "Sold website for a Swedish cleaning company — fully responsive, multilingual.",
+    "projects.p6.role": "Full-stack development",
+    "projects.p6.status": "Sold",
+    "projects.p6.year": "2024",
+    "projects.p6.scope": "Cleaning · Sweden",
+    "projects.lb.role": "Role",
+    "projects.lb.status": "Status",
+    "projects.lb.year": "Year",
+    "projects.lb.scope": "Scope",
+    "case.subtitle": "Threat Intelligence System",
+    "case.tag": "Selected system / 01",
+    "case.input.dt": "Input",
+    "case.input.dd": "Open sources",
+    "case.process.dt": "Process",
+    "case.process.dd": "Parsing → Classification → Analysis → AI",
+    "case.output.dt": "Output",
+    "case.output.dd": "Threat intelligence, reports, situational awareness",
+    "case.tech.dt": "Tech",
+    "stack.cta": "Discuss",
+    "process.index": "Process",
+    "process.title": "What happens after you press the button",
+    "process.lead": "Five steps from the first message to a deployed system. No surprises along the way.",
+    "process.s1.h": "Discovery",
+    "process.s1.p": "Breaking down the task, system boundaries, and risks. Whether it's even worth building this way.",
+    "process.s2.h": "Architecture",
+    "process.s2.p": "Data model, stack, failure points, security plan — before a single line of code is written.",
+    "process.s3.h": "Build",
+    "process.s3.p": "Implementation runs in parallel streams under my continuous review of every layer.",
+    "process.s4.h": "Test",
+    "process.s4.p": "Edge cases, security, and performance checked before you ever see it.",
+    "process.s5.h": "Deploy",
+    "process.s5.p": "Rollout, documentation, and access your team can live with without me.",
+    "trust.index": "Competencies",
+    "trust.title": "The vocabulary I use every day",
+    "trust.lead": "No invented clients, certificates, or awards — only what I actually work with.",
+    "faq.index": "FAQ",
+    "faq.title": "The questions I get most often",
+    "faq.q1": "What can I hire you for?",
+    "faq.a1": "Web applications, AI systems, automation, Telegram bots, design systems, and integrations — from idea to deployed system.",
+    "faq.q2": "How does the work start?",
+    "faq.a2": "With a short description of the task on Telegram or email. I reply with a timeline estimate and whether I take the project on at all.",
+    "faq.q3": "Do you work with an existing codebase?",
+    "faq.a3": "Yes, as long as the codebase's structure allows working on it without risking the system's stability.",
+    "faq.q4": "Can I commission AI automation?",
+    "faq.a4": "Yes — LLM-API pipelines, open-data processing, bots, and agent logic are the core of the work.",
+    "faq.q5": "How does payment work?",
+    "faq.a5": "50% upfront before the start, the rest on delivery. Details are agreed on in the technical specification.",
+    "faq.q6": "What do I get once it's finished?",
+    "faq.a6": "Clean structured code, documentation, and access — your team can live with the system without me.",
+    "contact.title": "Have a system to build?",
+    "contact.lead": "Describe the problem — I'll tell you what can be built, how long it should take, and whether I'm the right person for it.",
+    "contact.telegram": "Message on Telegram",
+    "contact.orMail": "or email — ",
+    "footer.fullname": "Nazar Semenenko",
+    "footer.role": "Digital Systems Architect & Cybersecurity Specialist",
+    "footer.rights": "All rights reserved."
+  }
+};
+
+function setLang(lang) {
+  const dict = I18N[lang] || I18N.uk;
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key] != null) el.textContent = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const key = el.getAttribute("data-i18n-html");
+    if (dict[key] != null) el.innerHTML = dict[key];
+  });
+
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc && dict["meta.desc"]) metaDesc.setAttribute("content", dict["meta.desc"]);
+
+  document.querySelectorAll("#langSwitch button").forEach(btn => {
+    btn.classList.toggle("is-active", btn.dataset.lang === lang);
+  });
+
+  try { localStorage.setItem("ns-lang", lang); } catch (_) {}
+}
+
+// Init language
+(function initLang() {
+  let lang = "uk";
+  try {
+    const saved = localStorage.getItem("ns-lang");
+    if (saved === "en" || saved === "uk") lang = saved;
+    else if (navigator.language && navigator.language.toLowerCase().startsWith("en")) lang = "en";
+  } catch (_) {}
+  setLang(lang);
+
+  document.getElementById("langSwitch").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-lang]");
+    if (btn) setLang(btn.dataset.lang);
+  });
+})();
+
+/* ============================================================
+   3. Рухомий рядок
+   ============================================================ */
+const WORDS = ["Vibe-coding","Cyber intelligence","MITRE ATT&CK","AI architecture",
+               "Full-stack","OSINT","Digital diplomacy","Automation"];
+const track = document.getElementById("tickerTrack");
+track.innerHTML = [...WORDS, ...WORDS]
+  .map(w => `<span>${w} <b>/</b></span>`).join("");
+
+/* ============================================================
+   4. Прогрес читання + стан шапки
+   ============================================================ */
+const bar = document.getElementById("progress");
+const topbar = document.getElementById("topbar");
+let ticking = false;
+
+function onScroll(){
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + "%";
+  topbar.dataset.stuck = window.scrollY > 40;
+  ticking = false;
+}
+addEventListener("scroll", () => {
+  if (!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+}, { passive:true });
+onScroll();
+
+/* ============================================================
+   5. Поява секцій при скролі
+   ============================================================ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add("is-in"); io.unobserve(e.target); }
+  });
+}, { threshold:.18, rootMargin:"0px 0px -60px 0px" });
+
+document.querySelectorAll(".lift").forEach(el => io.observe(el));
+
+/* ============================================================
+   FAQ accordion
+   ============================================================ */
+document.querySelectorAll("#faqList .faq__item").forEach(item => {
+  const btn = item.querySelector(".faq__q");
+  btn.addEventListener("click", () => {
+    const open = item.getAttribute("data-open") === "true";
+    document.querySelectorAll("#faqList .faq__item").forEach(i => i.setAttribute("data-open", "false"));
+    item.setAttribute("data-open", open ? "false" : "true");
+  });
+});
+
+/* ============================================================
+   Process — scroll-driven glow sweep (01 → 05)
+   ============================================================ */
+(function initRoadmapProgress(){
+  const line = document.getElementById("roadmapLine");
+  if (!line) return;
+  const stages = line.querySelectorAll(".stage");
+  let raf = null;
+
+  function update(){
+    raf = null;
+    const rect = line.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    // 0% when the line is still near the bottom of the viewport,
+    // 100% once it has scrolled up past the upper third — gives a
+    // smooth sweep as the section moves through view.
+    const start = vh * 0.88;
+    const end = vh * 0.28;
+    let p = (start - rect.top) / (start - end);
+    p = Math.min(1, Math.max(0, p));
+
+    line.style.setProperty("--rm-progress", (p * 100).toFixed(1) + "%");
+    line.style.setProperty("--rm-progress-v", (p * 100).toFixed(1) + "%");
+
+    stages.forEach((stage, i) => {
+      const threshold = (i + 0.5) / stages.length;
+      stage.dataset.done = p >= threshold ? "true" : "false";
+    });
+  }
+
+  function onScrollOrResize(){
+    if (raf) return;
+    raf = requestAnimationFrame(update);
+  }
+
+  addEventListener("scroll", onScrollOrResize, { passive:true });
+  addEventListener("resize", onScrollOrResize);
+  update();
+})();
+
+/* ============================================================
+   6. Мікроінтерактив: світло на монограмі + магнітні кнопки
+   ============================================================ */
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine = matchMedia("(pointer: fine)").matches;
+
+if (!reduced && fine){
+  const mono = document.getElementById("monogram");
+  const spot = document.getElementById("ns-spot-grad");
+
+  mono.addEventListener("pointermove", (e) => {
+    const r = mono.getBoundingClientRect();
+    const px = Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100));
+    const py = Math.min(100, Math.max(0, ((e.clientY - r.top) / r.height) * 100));
+    spot.setAttribute("cx", px + "%");
+    spot.setAttribute("cy", py + "%");
+  });
+
+  document.querySelectorAll("[data-magnet]").forEach(btn => {
+    btn.addEventListener("pointermove", (e) => {
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) * .18;
+      const y = (e.clientY - r.top - r.height / 2) * .28;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
+  });
+}
+
+/* ============================================================
+   7. Cinematic Projects Gallery
+   ============================================================ */
+(function initProjects(){
+  const outer    = document.getElementById("projects");
+  const sticky   = document.getElementById("projectsSticky");
+  const track    = document.getElementById("projTrack");
+  const bar      = document.getElementById("projProgressBar");
+  const counter  = document.getElementById("projCounter");
+  if (!outer || !track) return;
+
+  const TOTAL = track.querySelectorAll(".proj").length;
+  let currentOff = 0;
+
+  /* ---- measure how far we can scroll horizontally ---- */
+  function maxScroll(){
+    return track.scrollWidth - track.parentElement.clientWidth;
+  }
+
+  /* ---- set outer height so sticky stays pinned long enough ---- */
+  function setHeight(){
+    const extra = maxScroll();
+    outer.style.height = (sticky.offsetHeight + extra) + "px";
+  }
+
+  /* ---- update track position & UI ---- */
+  function update(){
+    const outerRect = outer.getBoundingClientRect();
+    const scrolled  = -outerRect.top;
+    const max       = maxScroll();
+    const clamped   = Math.min(Math.max(scrolled, 0), max);
+
+    /* smooth interpolation */
+    const target = clamped;
+    currentOff += (target - currentOff) * .12;
+    if (Math.abs(target - currentOff) < .5) currentOff = target;
+
+    track.style.transform = "translateX(-" + currentOff + "px)";
+
+    /* progress bar */
+    const pct = max > 0 ? (currentOff / max * 100).toFixed(1) : 0;
+    bar.style.setProperty("--prog", pct + "%");
+
+    /* counter: which card is most visible */
+    const cards = track.querySelectorAll(".proj");
+    const wrapCx = track.parentElement.getBoundingClientRect().left + track.parentElement.clientWidth / 2;
+    let closest = 0, minDist = Infinity;
+    cards.forEach((c, i) => {
+      const cr = c.getBoundingClientRect();
+      const cx = cr.left + cr.width / 2;
+      const d  = Math.abs(cx - wrapCx);
+      if (d < minDist){ minDist = d; closest = i; }
+    });
+    const n = String(closest + 1).padStart(2, "0");
+    const t = String(TOTAL).padStart(2, "0");
+    counter.innerHTML = n + "&thinsp;/&thinsp;" + t;
+
+    rafId = requestAnimationFrame(update);
+  }
+
+  let rafId = null;
+  function startRaf(){ if (!rafId) rafId = requestAnimationFrame(update); }
+  function stopRaf(){ if (rafId){ cancelAnimationFrame(rafId); rafId = null; } }
+
+  /* observe when section is near viewport */
+  const secObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { e.isIntersecting ? startRaf() : stopRaf(); });
+  }, { rootMargin: "200px" });
+  secObs.observe(outer);
+
+  setHeight();
+  addEventListener("resize", () => { setHeight(); currentOff = 0; });
+
+  /* ---- LIGHTBOX data ---- */
+  const PROJECTS = [
+    {
+      img: "photos/alert map sr.jpg",
+      tags: ["Інфографіка", "Telegram", "GIS", "Data Viz", "БпЛа"]
+    },
+    {
+      img: "photos/map sr.jpg",
+      tags: ["Інфографіка", "Telegram", "Real-time", "GIS", "Tracking"]
+    },
+    {
+      img: "photos/cassandra.jpg",
+      tags: ["LLM API", "Python", "RAG", "NLP", "Groq"]
+    },
+    {
+      img: "photos/collabit.png",
+      tags: ["React", "Node.js", "TypeScript", "WebSocket", "Training"]
+    },
+    {
+      img: "photos/soma.jpg",
+      tags: ["Figma", "Next.js", "CSS", "Restaurant", "UI/UX"]
+    },
+    {
+      img: "photos/stadnu.jpg",
+      tags: ["React", "Next.js", "i18n", "Vercel", "Sweden"]
+    }
+  ];
+
+  /* ---- Lightbox logic ---- */
+  const lb      = document.getElementById("lb");
+  const lbBg    = document.getElementById("lbBg");
+  const lbClose = document.getElementById("lbClose");
+  const lbPrev  = document.getElementById("lbPrev");
+  const lbNext  = document.getElementById("lbNext");
+  const lbImg   = document.getElementById("lbImg");
+  const lbBadge = document.getElementById("lbBadge");
+  const lbNum   = document.getElementById("lbNum");
+  const lbTitle = document.getElementById("lbTitle");
+  const lbCat   = document.getElementById("lbCategory");
+  const lbDesc  = document.getElementById("lbDesc");
+  const lbMeta  = document.getElementById("lbMeta");
+  const lbTagsEl= document.getElementById("lbTags");
+  if (!lb) return;
+
+  let lbActive = -1;
+  const lang = () => document.documentElement.lang || "uk";
+  const t = (key) => (I18N[lang()] || I18N.uk)[key] || "";
+
+  function openLb(idx){
+    lbActive = ((idx % TOTAL) + TOTAL) % TOTAL;
+    const proj = PROJECTS[lbActive];
+    const cards = track.querySelectorAll(".proj");
+    const card  = cards[lbActive];
+    const num   = String(lbActive + 1).padStart(2,"0") + " / " + String(TOTAL).padStart(2,"0");
+    const pfx   = "projects.p" + (lbActive + 1) + ".";
+
+    lbImg.src = proj.img;
+    lbImg.alt = t(pfx + "title");
+    lbBadge.textContent = num;
+    lbNum.textContent   = num;
+    lbTitle.textContent = t(pfx + "title");
+    lbCat.textContent   = t(pfx + "cat");
+    lbDesc.textContent  = t(pfx + "desc");
+
+    lbMeta.innerHTML = [
+      [t("projects.lb.role"),   t(pfx + "role")],
+      [t("projects.lb.status"), t(pfx + "status")],
+      [t("projects.lb.year"),   t(pfx + "year")],
+      [t("projects.lb.scope"),  t(pfx + "scope")]
+    ].map(([dt, dd]) =>
+      "<div class='lb__meta-item'><dt>" + dt + "</dt><dd>" + dd + "</dd></div>"
+    ).join("");
+
+    lbTagsEl.innerHTML = proj.tags.map(tag =>
+      "<li>" + tag + "</li>"
+    ).join("");
+
+    lb.setAttribute("aria-hidden", "false");
+    lb.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLb(){
+    lb.classList.remove("is-open");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    setTimeout(() => { lbImg.src = ""; }, 400);
+    lbActive = -1;
+  }
+
+  track.querySelectorAll(".proj").forEach((card, i) => {
+    card.addEventListener("click", () => openLb(i));
+    card.setAttribute("tabindex", "0");
+    card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") openLb(i); });
+  });
+
+  lbClose.addEventListener("click", closeLb);
+  lbBg.addEventListener("click", closeLb);
+  lbPrev.addEventListener("click", (e) => { e.stopPropagation(); openLb(lbActive - 1); });
+  lbNext.addEventListener("click", (e) => { e.stopPropagation(); openLb(lbActive + 1); });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-open")) return;
+    if (e.key === "Escape")     closeLb();
+    if (e.key === "ArrowLeft")  openLb(lbActive - 1);
+    if (e.key === "ArrowRight") openLb(lbActive + 1);
+  });
+
+  /* touch swipe in lightbox */
+  let lbTouchX = null;
+  lb.addEventListener("touchstart", e => { lbTouchX = e.touches[0].clientX; }, { passive:true });
+  lb.addEventListener("touchend",   e => {
+    if (lbTouchX === null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    if (Math.abs(dx) > 50) dx < 0 ? openLb(lbActive + 1) : openLb(lbActive - 1);
+    lbTouchX = null;
+  });
+
+  /* touch swipe on gallery track */
+  let touchStartX = null, touchStartOff = 0;
+  track.parentElement.addEventListener("touchstart", e => {
+    touchStartX   = e.touches[0].clientX;
+    touchStartOff = currentOff;
+    stopRaf();
+  }, { passive:true });
+  track.parentElement.addEventListener("touchmove", e => {
+    if (touchStartX === null) return;
+    const dx = touchStartX - e.touches[0].clientX;
+    currentOff = Math.max(0, Math.min(maxScroll(), touchStartOff + dx));
+    track.style.transform = "translateX(-" + currentOff + "px)";
+    const pct = maxScroll() > 0 ? (currentOff / maxScroll() * 100).toFixed(1) : 0;
+    bar.style.setProperty("--prog", pct + "%");
+  }, { passive:true });
+  track.parentElement.addEventListener("touchend", () => {
+    touchStartX = null;
+    startRaf();
+  });
+})();
+</script>
+</body>
+</html>

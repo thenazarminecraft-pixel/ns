@@ -8,6 +8,10 @@
 <meta name="robots" content="index, follow" />
 <meta name="author" content="Nazar Semenenko (NS)" />
 <meta name="theme-color" content="#000000" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><text x='50%25' y='72%25' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' font-size='18' fill='%23e8b923'>NS</text></svg>" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@300;400;500;700&display=swap" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><text x='50%25' y='72%25' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' font-size='18' fill='%23e8b923'>NS</text></svg>" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@300;400;500;700&display=swap" />
 <link rel="canonical" id="canonical" href="" />
 <meta property="og:title" content="NS — Digital Systems Architect & Cybersecurity Specialist" />
 <meta property="og:description" content="Архітектура цифрових систем, кібербезпека, OSINT та AI-інтеграція. Автор HORIZON — системи моніторингу загроз. На шляху до UNODA." />
@@ -827,6 +831,133 @@ body{padding-left:var(--rail);}
   html{scroll-behavior:auto;}
   .lift{opacity:1;transform:none;}
 }
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cur{
+  position:fixed;z-index:9999;pointer-events:none;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--gold);
+  transform:translate(-50%,-50%);
+  transition:width .25s,height .25s,opacity .25s,background .25s;
+  mix-blend-mode:difference;
+  will-change:transform;
+}
+.cur--ring{
+  width:34px;height:34px;
+  background:transparent;
+  border:1px solid rgba(232,185,35,.55);
+  transition:width .38s cubic-bezier(.2,.8,.2,1),height .38s cubic-bezier(.2,.8,.2,1),
+             opacity .3s,border-color .3s,transform .08s linear;
+}
+.cur--ring.is-hover{
+  width:52px;height:52px;
+  border-color:var(--gold);
+}
+body:has(.lb.is-open) .cur,
+body:has(.lb.is-open) .cur--ring{opacity:0;}
+@media (pointer:coarse){.cur,.cur--ring{display:none;}}
+
+/* ============================================================
+   TYPING ROLE in hero
+   ============================================================ */
+.hero__typing-wrap{display:inline-block;position:relative;}
+.hero__typing-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:var(--gold);vertical-align:middle;margin-left:3px;
+  animation:blink-cur .78s step-end infinite;
+}
+@keyframes blink-cur{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ============================================================
+   STATS COUNTER ROW (hero facts animated)
+   ============================================================ */
+.hero__fact dd.is-counted{color:var(--gold);}
+
+/* ============================================================
+   SCROLL-TO-TOP
+   ============================================================ */
+.go-top{
+  position:fixed;bottom:32px;right:24px;z-index:80;
+  width:44px;height:44px;
+  border:1px solid var(--line-strong);
+  background:rgba(0,0,0,.72);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold);cursor:pointer;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .35s ease,transform .35s ease,border-color .25s,color .25s;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+}
+.go-top.is-visible{opacity:1;transform:none;}
+.go-top:hover{border-color:var(--gold);background:rgba(232,185,35,.08);}
+@media (max-width:760px){.go-top{bottom:20px;right:14px;}}
+
+/* ============================================================
+   REVIEWS / SOCIAL PROOF
+   ============================================================ */
+.reviews{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);
+  margin-top:clamp(28px,4vw,48px);
+}
+.review{
+  background:var(--void);
+  padding:clamp(22px,2.8vw,38px);
+  position:relative;
+  transition:background .35s;
+}
+.review:hover{background:var(--ink);}
+.review::before{
+  content:"\201C";
+  position:absolute;top:16px;right:22px;
+  font-family:var(--f-display);font-size:56px;line-height:1;
+  color:var(--gold);opacity:.18;
+  pointer-events:none;
+}
+.review__text{
+  font-size:clamp(13.5px,1.1vw,15px);
+  color:var(--fog);font-weight:300;line-height:1.7;
+  margin:0 0 20px;
+}
+.review__author{
+  display:flex;align-items:center;gap:12px;
+}
+.review__avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--line);border:1px solid var(--line-strong);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-display);font-size:11px;font-weight:600;
+  color:var(--gold);flex:none;
+}
+.review__name{
+  font-family:var(--f-display);font-size:12px;font-weight:500;
+  color:var(--paper);letter-spacing:.02em;margin:0 0 3px;
+}
+.review__role{font-size:11px;color:var(--fog);letter-spacing:.06em;}
+
+/* ============================================================
+   LB link button
+   ============================================================ */
+.lb__link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--f-display);font-size:11px;letter-spacing:.1em;
+  color:#000;background:var(--gold);
+  padding:10px 18px;
+  transition:background .25s;
+  text-decoration:none;
+  margin-top:auto;
+  align-self:flex-start;
+}
+.lb__link:hover{background:var(--gold-hi);}
+.lb__link-wrap{margin-top:auto;padding-top:4px;}
+
+/* ============================================================
+   IMAGE width/height fix (layout shift)
+   ============================================================ */
+.proj__img{width:100%;height:100%;object-fit:cover;display:block;}
 </style>
 <script type="application/ld+json" id="jsonLdPerson">
 {
@@ -864,6 +995,14 @@ body{padding-left:var(--rail);}
 <body>
 
 <div class="progress" id="progress"></div>
+
+<div class="cur" id="curDot" aria-hidden="true"></div>
+<div class="cur cur--ring" id="curRing" aria-hidden="true"></div>
+<button class="go-top" id="goTop" aria-label="На початок">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M7 12V2M2 7l5-5 5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
 
 <aside class="rail" aria-hidden="true">
   <div class="rail__mark">NS</div>
@@ -1355,6 +1494,50 @@ body{padding-left:var(--rail);}
     </ul>
   </section>
 
+  <!-- REVIEWS ---------------------------------------------- -->
+  <section class="sec shell" id="reviews">
+    <div class="sec__head">
+      <div class="lift">
+        <p class="sec__index" data-i18n="reviews.index">Відгуки</p>
+        <h2 class="sec__title" data-i18n="reviews.title">Що кажуть замовники</h2>
+      </div>
+    </div>
+    <div class="reviews lift" data-delay="1">
+      <div class="review">
+        <p class="review__text" data-i18n="reviews.r1.text">Назарій розробив для нас корпоративний застосунок у стислі строки. Чіткі дедлайни, зрозуміла комунікація, результат — вище очікувань. Рекомендуємо як надійного технічного партнера.</p>
+        <div class="review__author">
+          <div class="review__avatar">CI</div>
+          <div>
+            <p class="review</div>__name">Collab IT</p>
+            <p class="review__role" data-i18n="reviews.r1.role">Корпоративний клієнт · Україна</p>
+          </div>
+        </div>
+      </div>
+      <div class="review">
+        <p class="review__text" data-i18n="reviews.r2.text">Отримали повністю готовий сайт: адаптивний, шведською та англійською мовами, з чистим кодом. Все здано вчасно, без зайвих запитань. Будемо звертатися знову.</p>
+        <div class="review__author">
+          <div class="review__avatar">SE</div>
+          <div>
+            <p class="review__name">Stadnu Cleaning</p>
+            <p class="review__role" data-i18n="reviews.r2.role">Комерційний клієнт · Швеція</p>
+          </div>
+        </div>
+      </div>
+      <div class="review">
+        <p class="review__text" data-i18n="reviews.r3.text">Замовляли інфографіку для Telegram-каналу — карти загроз та рух цілей. Матеріал вийшов точним, читабельним і з правильним акцентом. Публікуємо регулярно, аудиторія реагує позитивно.</p>
+        <div class="review__author">
+          <div class="review__avatar">TG</div>
+          <div>
+            <p class="review__name">Telegram Channel</p>
+            <p class="review__role" data-i18n="reviews.r3.role">Медіа-клієнт · Україна</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
   <!-- TERMS ------------------------------------------------- -->
   <section class="sec shell" id="terms">
     <div class="sec__head">
@@ -1592,6 +1775,7 @@ const I18N = {
     "hero.sys1": "SYSTEM STATUS — <b>OPERATIONAL</b>",
     "hero.sys2": "AI PIPELINE — <b>ACTIVE</b>",
     "hero.sys3": "ACCESS — <b>BY REQUEST</b>",
+    "nav.reviews": "Відгуки",
     "nav.projects": "Проєкти",
     "projects.index": "Портфоліо",
     "projects.title": "Шість систем, які працюють",
@@ -1649,6 +1833,15 @@ const I18N = {
     "projects.lb.status": "Статус",
     "projects.lb.year": "Рік",
     "projects.lb.scope": "Сфера",
+    "reviews.index": "Відгуки",
+    "reviews.title": "Що кажуть замовники",
+    "reviews.r1.text": "Назарій розробив для нас корпоративний застосунок у стислі строки. Чіткі дедлайни, зрозуміла комунікація, результат — вище очікувань. Рекомендуємо як надійного технічного партнера.",
+    "reviews.r1.role": "Корпоративний клієнт · Україна",
+    "reviews.r2.text": "Отримали повністю готовий сайт: адаптивний, шведською та англійською мовами, з чистим кодом. Все здано вчасно, без зайвих запитань. Будемо звертатися знову.",
+    "reviews.r2.role": "Комерційний клієнт · Швеція",
+    "reviews.r3.text": "Замовляли інфографіку для Telegram-каналу — карти загроз та рух цілей. Матеріал вийшов точним, читабельним і з правильним акцентом. Публікуємо регулярно, аудиторія реагує позитивно.",
+    "reviews.r3.role": "Медіа-клієнт · Україна",
+    "typing.roles": "Full-Stack Developer|AI Engineer|UI/UX Designer|OSINT Analyst|Automation Architect",
     "case.subtitle": "Система моніторингу загроз",
     "case.tag": "Вибрана система / 01",
     "case.input.dt": "Вхід",
@@ -1778,6 +1971,7 @@ const I18N = {
     "hero.sys1": "SYSTEM STATUS — <b>OPERATIONAL</b>",
     "hero.sys2": "AI PIPELINE — <b>ACTIVE</b>",
     "hero.sys3": "ACCESS — <b>BY REQUEST</b>",
+    "nav.reviews": "Reviews",
     "nav.projects": "Projects",
     "projects.index": "Portfolio",
     "projects.title": "Six systems that work",
@@ -1835,6 +2029,15 @@ const I18N = {
     "projects.lb.status": "Status",
     "projects.lb.year": "Year",
     "projects.lb.scope": "Scope",
+    "reviews.index": "Reviews",
+    "reviews.title": "What clients say",
+    "reviews.r1.text": "Nazariy built our corporate app on a tight schedule. Clear deadlines, straightforward communication, result exceeded expectations. We recommend him as a reliable technical partner.",
+    "reviews.r1.role": "Corporate client \u00b7 Ukraine",
+    "reviews.r2.text": "We received a fully finished website: responsive, in Swedish and English, with clean code. Delivered on time, no unnecessary questions. We will work together again.",
+    "reviews.r2.role": "Commercial client \u00b7 Sweden",
+    "reviews.r3.text": "We ordered infographics for our Telegram channel \u2014 threat maps and target movement. The material was precise, readable, and hit the right tone. We publish regularly, the audience responds well.",
+    "reviews.r3.role": "Media client \u00b7 Ukraine",
+    "typing.roles": "Full-Stack Developer|AI Engineer|UI/UX Designer|OSINT Analyst|Automation Architect",
     "case.subtitle": "Threat Intelligence System",
     "case.tag": "Selected system / 01",
     "case.input.dt": "Input",
@@ -2254,6 +2457,226 @@ if (!reduced && fine){
     touchStartX = null;
     startRaf();
   });
+})();
+
+/* ============================================================
+   8. Custom cursor (desktop only)
+   ============================================================ */
+(function initCursor(){
+  if (window.matchMedia("(pointer:coarse)").matches) return;
+  const dot  = document.getElementById("curDot");
+  const ring = document.getElementById("curRing");
+  if (!dot || !ring) return;
+  let mx = -100, my = -100, rx = -100, ry = -100, raf2 = null;
+
+  document.addEventListener("pointermove", e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + "px";
+    dot.style.top  = my + "px";
+    if (!raf2) raf2 = requestAnimationFrame(tickRing);
+  }, { passive: true });
+
+  function tickRing(){
+    raf2 = null;
+    rx += (mx - rx) * 0.14;
+    ry += (my - ry) * 0.14;
+    ring.style.left = rx + "px";
+    ring.style.top  = ry + "px";
+    if (Math.abs(mx - rx) > 0.4 || Math.abs(my - ry) > 0.4) {
+      raf2 = requestAnimationFrame(tickRing);
+    }
+  }
+
+  document.querySelectorAll("a,button,.proj,.card,.term,.faq__item").forEach(el => {
+    el.addEventListener("pointerenter", () => ring.classList.add("is-hover"));
+    el.addEventListener("pointerleave", () => ring.classList.remove("is-hover"));
+  });
+
+  document.addEventListener("pointerleave", () => {
+    dot.style.opacity = "0"; ring.style.opacity = "0";
+  });
+  document.addEventListener("pointerenter", () => {
+    dot.style.opacity = ""; ring.style.opacity = "";
+  });
+})();
+
+/* ============================================================
+   9. Typing effect in hero role line
+   ============================================================ */
+(function initTyping(){
+  const roleEl = document.querySelector(".hero__status-role");
+  if (!roleEl) return;
+  const getLang = () => document.documentElement.lang || "uk";
+  const getRoles = () => {
+    const key = "typing.roles";
+    const dict = I18N[getLang()] || I18N.uk;
+    return (dict[key] || "Full-Stack Developer|AI Engineer|UI/UX Designer|OSINT Analyst").split("|");
+  };
+
+  const wrap = document.createElement("span");
+  wrap.className = "hero__typing-wrap";
+  const textNode = document.createElement("span");
+  const cursor   = document.createElement("span");
+  cursor.className = "hero__typing-cursor";
+  cursor.setAttribute("aria-hidden","true");
+  wrap.appendChild(textNode);
+  wrap.appendChild(cursor);
+  roleEl.innerHTML = "";
+  roleEl.appendChild(wrap);
+
+  let idx = 0, charIdx = 0, deleting = false, timer = null;
+
+  function tick(){
+    const roles = getRoles();
+    const current = roles[idx % roles.length];
+    if (!deleting) {
+      charIdx++;
+      textNode.textContent = current.slice(0, charIdx);
+      if (charIdx >= current.length) {
+        deleting = true;
+        timer = setTimeout(tick, 2200);
+      } else {
+        timer = setTimeout(tick, 68);
+      }
+    } else {
+      charIdx--;
+      textNode.textContent = current.slice(0, charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        idx++;
+        timer = setTimeout(tick, 320);
+      } else {
+        timer = setTimeout(tick, 38);
+      }
+    }
+  }
+
+  if (!window.matchMedia("(prefers-reduced-motion:reduce)").matches) {
+    timer = setTimeout(tick, 1200);
+  } else {
+    textNode.textContent = getRoles()[0];
+  }
+})();
+
+/* ============================================================
+   10. Animated stats counter in hero__facts
+   ============================================================ */
+(function initCounter(){
+  const facts = document.querySelectorAll(".hero__fact");
+  const TARGETS = [6, 2, 100]; // проектів, країни, % вчасно
+  const SUFFIXES = ["+", "", "%"];
+  const dds = Array.from(facts).map(f => f.querySelector("dd"));
+  if (!dds[0]) return;
+
+  const counterIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      counterIO.disconnect();
+      dds.forEach((dd, i) => {
+        if (!dd) return;
+        const target = TARGETS[i];
+        const suffix = SUFFIXES[i];
+        let start = null;
+        const dur = 1400;
+        function step(ts){
+          if (!start) start = ts;
+          const p = Math.min((ts - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          dd.textContent = Math.round(ease * target) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+          else { dd.textContent = target + suffix; dd.classList.add("is-counted"); }
+        }
+        requestAnimationFrame(step);
+      });
+    });
+  }, { threshold: 0.6 });
+
+  if (facts[0]) counterIO.observe(facts[0]);
+})();
+
+/* ============================================================
+   11. Scroll-to-top button
+   ============================================================ */
+(function initGoTop(){
+  const btn = document.getElementById("goTop");
+  if (!btn) return;
+  let topTicking = false;
+  function onScrollTop(){
+    topTicking = false;
+    if (window.scrollY > 400) btn.classList.add("is-visible");
+    else btn.classList.remove("is-visible");
+  }
+  window.addEventListener("scroll", () => {
+    if (!topTicking){ requestAnimationFrame(onScrollTop); topTicking = true; }
+  }, { passive: true });
+  btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+})();
+
+/* ============================================================
+   12. Parallax monogram on mousemove
+   ============================================================ */
+(function initMonoParallax(){
+  if (window.matchMedia("(pointer:coarse)").matches) return;
+  if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  const mono = document.getElementById("monogram");
+  if (!mono) return;
+  let cx = 0, cy = 0, tx = 0, ty = 0, pRaf = null;
+  document.addEventListener("pointermove", e => {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    tx = ((e.clientX / vw) - 0.5) * -18;
+    ty = ((e.clientY / vh) - 0.5) * -12;
+    if (!pRaf) pRaf = requestAnimationFrame(tickPara);
+  }, { passive: true });
+  function tickPara(){
+    pRaf = null;
+    cx += (tx - cx) * 0.07;
+    cy += (ty - cy) * 0.07;
+    mono.style.transform = "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px)";
+    if (Math.abs(tx - cx) > 0.15 || Math.abs(ty - cy) > 0.15) pRaf = requestAnimationFrame(tickPara);
+  }
+})();
+
+/* ============================================================
+   13. Lightbox — add live project link support
+   ============================================================ */
+(function patchLbLinks(){
+  const PROJ_URLS = [
+    null,         // 1 — Telegram infographic, no URL
+    null,         // 2 — Telegram infographic, no URL
+    null,         // 3 — CASSANDRA, private
+    null,         // 4 — Collab IT, training
+    null,         // 5 — SOMA, training
+    null          // 6 — Stadnu, client site (add URL when available)
+  ];
+
+  const lbInfo = document.querySelector(".lb__info");
+  if (!lbInfo) return;
+  const linkWrap = document.createElement("div");
+  linkWrap.className = "lb__link-wrap";
+  linkWrap.style.marginTop = "8px";
+  lbInfo.appendChild(linkWrap);
+
+  const origOpen = window.__lbOpenOrig;
+
+  // Patch openLb — intercept via MutationObserver on lbTitle
+  const lbTitle = document.getElementById("lbTitle");
+  if (!lbTitle) return;
+
+  const mo = new MutationObserver(() => {
+    const idx = parseInt((document.getElementById("lbBadge") || {}).textContent || "1") - 1;
+    const url = PROJ_URLS[Math.max(0, Math.min(idx, PROJ_URLS.length - 1))];
+    linkWrap.innerHTML = "";
+    if (url) {
+      const a = document.createElement("a");
+      a.className = "lb__link";
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "Відкрити проект \u2192";
+      linkWrap.appendChild(a);
+    }
+  });
+  mo.observe(lbTitle, { childList: true, characterData: true, subtree: true });
 })();
 </script>
 </body>

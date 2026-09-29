@@ -344,7 +344,10 @@ section{position:relative;z-index:2;}
   align-items:center;
   overflow:hidden;
   position:relative;
+  cursor:grab;
+  user-select:none;
 }
+.projects-track-wrap:active{cursor:grabbing;}
 .projects-track{
   display:flex;
   gap:clamp(20px,2.4vw,36px);
@@ -2436,7 +2439,7 @@ if (!reduced && fine){
     lbTouchX = null;
   });
 
-  /* touch swipe on gallery track */
+  /* ---- touch swipe on gallery track ---- */
   let touchStartX = null, touchStartOff = 0;
   track.parentElement.addEventListener("touchstart", e => {
     touchStartX   = e.touches[0].clientX;
@@ -2455,6 +2458,78 @@ if (!reduced && fine){
     touchStartX = null;
     startRaf();
   });
+
+  /* ---- mouse wheel scroll on gallery ---- */
+  track.parentElement.addEventListener("wheel", e => {
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) < 2) return;
+    e.preventDefault();
+    currentOff = Math.max(0, Math.min(maxScroll(), currentOff + delta * 1.4));
+    startRaf();
+  }, { passive: false });
+
+  /* ---- mouse drag on gallery (desktop) ---- */
+  let dragStartX = null, dragStartOff = 0, isDragging = false;
+  const trackWrap = track.parentElement;
+
+  trackWrap.addEventListener("pointerdown", e => {
+    if (e.button !== 0) return;
+    dragStartX   = e.clientX;
+    dragStartOff = currentOff;
+    isDragging   = false;
+    trackWrap.setPointerCapture(e.pointerId);
+    track.style.transition = "none";
+  });
+
+  trackWrap.addEventListener("pointermove", e => {
+    if (dragStartX === null) return;
+    const dx = dragStartX - e.clientX;
+    if (!isDragging && Math.abs(dx) > 4) {
+      isDragging = true;
+      stopRaf();
+      trackWrap.style.cursor = "grabbing";
+    }
+    if (!isDragging) return;
+    currentOff = Math.max(0, Math.min(maxScroll(), dragStartOff + dx));
+    track.style.transform = "translateX(-" + currentOff + "px)";
+    const pct = maxScroll() > 0 ? (currentOff / maxScroll() * 100).toFixed(1) : 0;
+    bar.style.setProperty("--prog", pct + "%");
+  });
+
+  trackWrap.addEventListener("pointerup", e => {
+    if (dragStartX === null) return;
+    dragStartX = null;
+    trackWrap.style.cursor = "";
+    track.style.transition = "";
+    if (isDragging) {
+      isDragging = false;
+      startRaf();
+      /* snap до найближчої картки */
+      const cards = track.querySelectorAll(".proj");
+      let nearest = 0, minD = Infinity;
+      cards.forEach((c, i) => {
+        const d = Math.abs(c.offsetLeft - currentOff);
+        if (d < minD){ minD = d; nearest = i; }
+      });
+      const snapTarget = cards[nearest].offsetLeft - clamp(0, maxScroll(), 0);
+      currentOff = Math.max(0, Math.min(maxScroll(), cards[nearest].offsetLeft));
+      startRaf();
+    }
+  });
+
+  trackWrap.addEventListener("pointercancel", () => {
+    dragStartX = null;
+    trackWrap.style.cursor = "";
+    isDragging = false;
+    startRaf();
+  });
+
+  /* prevent click after drag */
+  trackWrap.addEventListener("click", e => {
+    if (isDragging) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
+
+  function clamp(min, max, v){ return Math.min(max, Math.max(min, v)); }
 })();
 
 /* ============================================================

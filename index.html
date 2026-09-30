@@ -324,36 +324,33 @@ section{position:relative;z-index:2;}
    PROJECTS — cinematic horizontal gallery
    ============================================================ */
 
-/* sticky wrapper that pins during horizontal scroll */
+/* ordinary horizontal gallery */
 .projects-outer{
   position:relative;
   z-index:2;
   background:var(--void);
 }
 .projects-sticky{
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
+  position:relative;
 }
 .projects-track-wrap{
-  flex:1;
   display:flex;
   align-items:center;
-  overflow:hidden;
+  overflow-x:auto;
+  overflow-y:hidden;
   position:relative;
   cursor:grab;
   user-select:none;
+  scrollbar-color:var(--gold) var(--line);
+  scrollbar-width:thin;
+  padding-block:clamp(28px,5vw,72px);
 }
 .projects-track-wrap:active{cursor:grabbing;}
 .projects-track{
   display:flex;
   gap:clamp(20px,2.4vw,36px);
   padding-inline:clamp(20px,5vw,72px);
-  will-change:transform;
-  transition:transform .06s linear;
+  min-width:max-content;
 }
 
 /* single project card */
@@ -478,14 +475,20 @@ section{position:relative;z-index:2;}
 .proj:hover .proj__tags li{color:var(--paper);border-color:var(--line-strong);}
 
 .proj__cta{
+  appearance:none;
+  border:0;
+  padding:0;
+  background:transparent;
   margin-top:16px;
   display:inline-flex;align-items:center;gap:8px;
   font-size:12px;letter-spacing:.1em;color:var(--gold);
   font-family:var(--f-display);
+  cursor:pointer;
   opacity:0;transform:translateX(-8px);
   transition:opacity .35s ease, transform .35s ease;
 }
 .proj:hover .proj__cta{opacity:1;transform:none;}
+@media (pointer:coarse){.proj__cta{opacity:1;transform:none;}}
 .proj__cta-arrow{display:inline-block;transition:transform .3s;}
 .proj__cta:hover .proj__cta-arrow{transform:translateX(4px);}
 
@@ -624,6 +627,19 @@ section{position:relative;z-index:2;}
 .lb__desc{
   font-size:14px;color:var(--fog);font-weight:300;line-height:1.7;
   margin:0 0 24px;flex:1;
+}
+.lb__story{
+  border-left:1px solid var(--gold);
+  padding-left:16px;
+  margin:0 0 24px;
+}
+.lb__story h3{
+  font-family:var(--f-display);font-size:11px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+  margin:0 0 8px;
+}
+.lb__story p{
+  margin:0;color:var(--fog);font-size:13px;font-weight:300;line-height:1.65;
 }
 .lb__meta{
   display:grid;grid-template-columns:1fr 1fr;gap:1px;
@@ -1319,7 +1335,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p1.title">Карта загроз БпЛа/ракет</h3>
               <p class="proj__desc" data-i18n="projects.p1.desc">Інфографіка для Telegram-каналу — карта областей, які можуть бути під загрозою БпЛа або ракет.</p>
               <ul class="proj__tags"><li>Інфографіка</li><li>Telegram</li><li>GIS</li><li>Data Viz</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1335,7 +1351,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p2.title">Карта руху ворожих цілей</h3>
               <p class="proj__desc" data-i18n="projects.p2.desc">Інфографіка для Telegram-каналу — динамічна карта руху ворожих цілей у режимі реального часу.</p>
               <ul class="proj__tags"><li>Інфографіка</li><li>Telegram</li><li>Real-time</li><li>GIS</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1351,7 +1367,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p3.title">CASSANDRA</h3>
               <p class="proj__desc" data-i18n="projects.p3.desc">Інтелектуальна система аналізу загроз на базі LLM з генерацією розвідувальних звітів документів.</p>
               <ul class="proj__tags"><li>LLM API</li><li>Python</li><li>RAG</li><li>NLP</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1367,7 +1383,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p4.title">Collab IT</h3>
               <p class="proj__desc" data-i18n="projects.p4.desc">Тренувальний проект для компанії Collab IT — корпоративний застосунок із командними процесами та дашбордами.</p>
               <ul class="proj__tags"><li>React</li><li>Node.js</li><li>TypeScript</li><li>WebSocket</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1383,7 +1399,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p5.title">Ресторан — SOMA</h3>
               <p class="proj__desc" data-i18n="projects.p5.desc">Тренувальний проект сайту ресторану з преміальним дизайном, меню та системою онлайн-бронювання.</p>
               <ul class="proj__tags"><li>Figma</li><li>Design System</li><li>Next.js</li><li>CSS</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1399,7 +1415,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p6.title">Stadnu — Cleaning SE</h3>
               <p class="proj__desc" data-i18n="projects.p6.desc">Проданий сайт для шведської компанії клінінгу та прибирання — повністю адаптивний, мультимовний.</p>
               <ul class="proj__tags"><li>React</li><li>Next.js</li><li>i18n</li><li>Vercel</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1425,6 +1441,10 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
         <h2 class="lb__title" id="lbTitle">Project</h2>
         <p class="lb__category" id="lbCategory">Category</p>
         <p class="lb__desc" id="lbDesc">Description</p>
+        <div class="lb__story">
+          <h3 id="lbStoryTitle">Як це зроблено</h3>
+          <p id="lbStory"></p>
+        </div>
         <dl class="lb__meta" id="lbMeta"></dl>
         <ul class="lb__tags" id="lbTags"></ul>
       </div>
@@ -2262,30 +2282,12 @@ if (!reduced && fine){
   const TOTAL = track.querySelectorAll(".proj").length;
   let currentOff = 0;
 
-  /* ---- measure how far we can scroll horizontally ---- */
-  function maxScroll(){
-    return track.scrollWidth - track.parentElement.clientWidth;
-  }
+  const trackWrap = track.parentElement;
 
-  /* ---- set outer height so sticky stays pinned long enough ---- */
-  function setHeight(){
-    const extra = maxScroll();
-    outer.style.height = (sticky.offsetHeight + extra) + "px";
-  }
-
-  /* ---- update track position & UI ---- */
+  /* ---- update native horizontal scroll UI ---- */
   function update(){
-    const outerRect = outer.getBoundingClientRect();
-    const scrolled  = -outerRect.top;
-    const max       = maxScroll();
-    const clamped   = Math.min(Math.max(scrolled, 0), max);
-
-    /* smooth interpolation */
-    const target = clamped;
-    currentOff += (target - currentOff) * .12;
-    if (Math.abs(target - currentOff) < .5) currentOff = target;
-
-    track.style.transform = "translateX(-" + currentOff + "px)";
+    const max = Math.max(0, trackWrap.scrollWidth - trackWrap.clientWidth);
+    currentOff = trackWrap.scrollLeft;
 
     /* progress bar */
     const pct = max > 0 ? (currentOff / max * 100).toFixed(1) : 0;
@@ -2293,7 +2295,7 @@ if (!reduced && fine){
 
     /* counter: which card is most visible */
     const cards = track.querySelectorAll(".proj");
-    const wrapCx = track.parentElement.getBoundingClientRect().left + track.parentElement.clientWidth / 2;
+    const wrapCx = trackWrap.getBoundingClientRect().left + trackWrap.clientWidth / 2;
     let closest = 0, minDist = Infinity;
     cards.forEach((c, i) => {
       const cr = c.getBoundingClientRect();
@@ -2305,47 +2307,60 @@ if (!reduced && fine){
     const t = String(TOTAL).padStart(2, "0");
     counter.innerHTML = n + "&thinsp;/&thinsp;" + t;
 
-    rafId = requestAnimationFrame(update);
   }
 
-  let rafId = null;
-  function startRaf(){ if (!rafId) rafId = requestAnimationFrame(update); }
-  function stopRaf(){ if (rafId){ cancelAnimationFrame(rafId); rafId = null; } }
-
-  /* observe when section is near viewport */
-  const secObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { e.isIntersecting ? startRaf() : stopRaf(); });
-  }, { rootMargin: "200px" });
-  secObs.observe(outer);
-
-  setHeight();
-  addEventListener("resize", () => { setHeight(); currentOff = 0; });
+  trackWrap.addEventListener("scroll", update, { passive:true });
+  addEventListener("resize", update);
 
   /* ---- LIGHTBOX data ---- */
   const PROJECTS = [
     {
       img: "photos/alert map sr.jpg",
-      tags: ["Інфографіка", "Telegram", "GIS", "Data Viz", "БпЛа"]
+      tags: ["Інфографіка", "Telegram", "GIS", "Data Viz", "БпЛа"],
+      how: {
+        uk: "Зібрав дані з відкритих джерел, перевірив географію та структурував її у зрозумілу карту областей. Візуальну систему побудував так, щоб за кілька секунд було видно рівень загрози, а фінальний макет підготував під формат Telegram.",
+        en: "I collected and verified open-source data, then structured it into a clear regional map. The visual system makes the threat level readable in seconds, and the final layout was prepared for Telegram."
+      }
     },
     {
       img: "photos/map sr.jpg",
-      tags: ["Інфографіка", "Telegram", "Real-time", "GIS", "Tracking"]
+      tags: ["Інфографіка", "Telegram", "Real-time", "GIS", "Tracking"],
+      how: {
+        uk: "Спроєктував карту як швидкий спосіб показувати зміну координат і напрямків руху. Дані очистив, прив'язав до карти та візуально розділив маршрут, напрямок і часовий контекст, щоб оновлення не перетворювалися на хаос.",
+        en: "I designed the map as a fast way to show changing coordinates and movement directions. The data was cleaned, mapped, and separated into route, direction, and time context so updates stay readable."
+      }
     },
     {
       img: "photos/cassandra.jpg",
-      tags: ["LLM API", "Python", "RAG", "NLP", "Groq"]
+      tags: ["LLM API", "Python", "RAG", "NLP", "Groq"],
+      how: {
+        uk: "Побудував пайплайн на Python: збір матеріалів, нормалізація, пошук релевантного контексту через RAG і передача його в LLM. Додав структурований формат результату, щоб модель генерувала не загальний текст, а придатний до перевірки розвідувальний звіт.",
+        en: "I built a Python pipeline for collection, normalization, RAG-based context retrieval, and LLM analysis. Structured outputs keep the model focused on verifiable intelligence reports rather than generic text."
+      }
     },
     {
       img: "photos/collabit.png",
-      tags: ["React", "Node.js", "TypeScript", "WebSocket", "Training"]
+      tags: ["React", "Node.js", "TypeScript", "WebSocket", "Training"],
+      how: {
+        uk: "Спочатку розклав командні процеси на ролі, стани та події, потім зібрав інтерфейс на React і API-шар на Node.js. WebSocket використав для синхронізації дашбордів у реальному часі, а TypeScript — щоб зменшити кількість помилок між клієнтом і сервером.",
+        en: "I mapped team workflows into roles, states, and events, then built the React interface and Node.js API layer. WebSocket keeps dashboards synchronized in real time, while TypeScript protects the client-server contract."
+      }
     },
     {
       img: "photos/soma.jpg",
-      tags: ["Figma", "Next.js", "CSS", "Restaurant", "UI/UX"]
+      tags: ["Figma", "Next.js", "CSS", "Restaurant", "UI/UX"],
+      how: {
+        uk: "Почав із прототипу у Figma: ієрархія меню, сценарій бронювання та мобільний шлях користувача. Після цього переніс дизайн у Next.js, побудував адаптивну сітку й додав мікроанімації, які підсилюють преміальне відчуття, але не заважають замовленню.",
+        en: "I started in Figma with the menu hierarchy, booking flow, and mobile user journey. Then I implemented it in Next.js with a responsive grid and restrained motion that supports the premium feel without getting in the way."
+      }
     },
     {
       img: "photos/stadnu.jpg",
-      tags: ["React", "Next.js", "i18n", "Vercel", "Sweden"]
+      tags: ["React", "Next.js", "i18n", "Vercel", "Sweden"],
+      how: {
+        uk: "Зібрав комерційний сайт навколо послуг і конверсійного сценарію: структура сторінок, блоки довіри, форма контакту та адаптив. Додав мультимовність, оптимізував зображення й підготував деплой на Vercel, щоб сайт однаково добре працював на телефоні та десктопі.",
+        en: "I built the commercial site around services and conversion: page structure, trust sections, contact flow, and responsive behavior. I added localization, optimized the imagery, and prepared a Vercel deployment for consistent mobile and desktop performance."
+      }
     }
   ];
 
@@ -2361,6 +2376,8 @@ if (!reduced && fine){
   const lbTitle = document.getElementById("lbTitle");
   const lbCat   = document.getElementById("lbCategory");
   const lbDesc  = document.getElementById("lbDesc");
+  const lbStoryTitle = document.getElementById("lbStoryTitle");
+  const lbStory = document.getElementById("lbStory");
   const lbMeta  = document.getElementById("lbMeta");
   const lbTagsEl= document.getElementById("lbTags");
   if (!lb) return;
@@ -2384,6 +2401,8 @@ if (!reduced && fine){
     lbTitle.textContent = t(pfx + "title");
     lbCat.textContent   = t(pfx + "cat");
     lbDesc.textContent  = t(pfx + "desc");
+    lbStoryTitle.textContent = lang() === "en" ? "How it was made" : "Як це зроблено";
+    lbStory.textContent = proj.how[lang()] || proj.how.uk;
 
     lbMeta.innerHTML = [
       [t("projects.lb.role"),   t(pfx + "role")],
@@ -2413,6 +2432,17 @@ if (!reduced && fine){
 
   track.querySelectorAll(".proj").forEach((card, i) => {
     card.addEventListener("click", () => openLb(i));
+    const cta = card.querySelector(".proj__cta");
+    cta.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+    });
+    cta.addEventListener("touchstart", (e) => {
+      e.stopPropagation();
+    }, { passive:true });
+    cta.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openLb(i);
+    });
     card.setAttribute("tabindex", "0");
     card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") openLb(i); });
   });
@@ -2439,97 +2469,7 @@ if (!reduced && fine){
     lbTouchX = null;
   });
 
-  /* ---- touch swipe on gallery track ---- */
-  let touchStartX = null, touchStartOff = 0;
-  track.parentElement.addEventListener("touchstart", e => {
-    touchStartX   = e.touches[0].clientX;
-    touchStartOff = currentOff;
-    stopRaf();
-  }, { passive:true });
-  track.parentElement.addEventListener("touchmove", e => {
-    if (touchStartX === null) return;
-    const dx = touchStartX - e.touches[0].clientX;
-    currentOff = Math.max(0, Math.min(maxScroll(), touchStartOff + dx));
-    track.style.transform = "translateX(-" + currentOff + "px)";
-    const pct = maxScroll() > 0 ? (currentOff / maxScroll() * 100).toFixed(1) : 0;
-    bar.style.setProperty("--prog", pct + "%");
-  }, { passive:true });
-  track.parentElement.addEventListener("touchend", () => {
-    touchStartX = null;
-    startRaf();
-  });
-
-  /* ---- mouse wheel scroll on gallery ---- */
-  track.parentElement.addEventListener("wheel", e => {
-    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (Math.abs(delta) < 2) return;
-    e.preventDefault();
-    currentOff = Math.max(0, Math.min(maxScroll(), currentOff + delta * 1.4));
-    startRaf();
-  }, { passive: false });
-
-  /* ---- mouse drag on gallery (desktop) ---- */
-  let dragStartX = null, dragStartOff = 0, isDragging = false;
-  const trackWrap = track.parentElement;
-
-  trackWrap.addEventListener("pointerdown", e => {
-    if (e.button !== 0) return;
-    dragStartX   = e.clientX;
-    dragStartOff = currentOff;
-    isDragging   = false;
-    trackWrap.setPointerCapture(e.pointerId);
-    track.style.transition = "none";
-  });
-
-  trackWrap.addEventListener("pointermove", e => {
-    if (dragStartX === null) return;
-    const dx = dragStartX - e.clientX;
-    if (!isDragging && Math.abs(dx) > 4) {
-      isDragging = true;
-      stopRaf();
-      trackWrap.style.cursor = "grabbing";
-    }
-    if (!isDragging) return;
-    currentOff = Math.max(0, Math.min(maxScroll(), dragStartOff + dx));
-    track.style.transform = "translateX(-" + currentOff + "px)";
-    const pct = maxScroll() > 0 ? (currentOff / maxScroll() * 100).toFixed(1) : 0;
-    bar.style.setProperty("--prog", pct + "%");
-  });
-
-  trackWrap.addEventListener("pointerup", e => {
-    if (dragStartX === null) return;
-    dragStartX = null;
-    trackWrap.style.cursor = "";
-    track.style.transition = "";
-    if (isDragging) {
-      isDragging = false;
-      startRaf();
-      /* snap до найближчої картки */
-      const cards = track.querySelectorAll(".proj");
-      let nearest = 0, minD = Infinity;
-      cards.forEach((c, i) => {
-        const d = Math.abs(c.offsetLeft - currentOff);
-        if (d < minD){ minD = d; nearest = i; }
-      });
-      const snapTarget = cards[nearest].offsetLeft - clamp(0, maxScroll(), 0);
-      currentOff = Math.max(0, Math.min(maxScroll(), cards[nearest].offsetLeft));
-      startRaf();
-    }
-  });
-
-  trackWrap.addEventListener("pointercancel", () => {
-    dragStartX = null;
-    trackWrap.style.cursor = "";
-    isDragging = false;
-    startRaf();
-  });
-
-  /* prevent click after drag */
-  trackWrap.addEventListener("click", e => {
-    if (isDragging) { e.stopPropagation(); e.preventDefault(); }
-  }, true);
-
-  function clamp(min, max, v){ return Math.min(max, Math.max(min, v)); }
+  update();
 })();
 
 /* ============================================================

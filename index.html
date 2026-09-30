@@ -2300,15 +2300,15 @@ if (!reduced && fine){
     const pct = max > 0 ? (currentOff / max * 100).toFixed(1) : 0;
     bar.style.setProperty("--prog", pct + "%");
 
-    /* counter: which card is most visible */
+    /* counter: first card visible in the native scroll viewport */
     const cards = track.querySelectorAll(".proj");
-    const wrapCx = trackWrap.getBoundingClientRect().left + trackWrap.clientWidth / 2;
-    let closest = 0, minDist = Infinity;
+    const viewportLeft = trackWrap.scrollLeft;
+    let closest = 0, found = false;
     cards.forEach((c, i) => {
-      const cr = c.getBoundingClientRect();
-      const cx = cr.left + cr.width / 2;
-      const d  = Math.abs(cx - wrapCx);
-      if (d < minDist){ minDist = d; closest = i; }
+      if (!found && c.offsetLeft + c.offsetWidth > viewportLeft + 1) {
+        closest = i;
+        found = true;
+      }
     });
     const n = String(closest + 1).padStart(2, "0");
     const t = String(TOTAL).padStart(2, "0");

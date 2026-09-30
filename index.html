@@ -2273,6 +2273,12 @@ if (!reduced && fine){
     outer.style.height = (sticky.offsetHeight + extra) + "px";
   }
 
+  function scrollToOffset(offset){
+    const sectionTop = outer.getBoundingClientRect().top + window.scrollY;
+    const target = Math.max(0, Math.min(maxScroll(), offset));
+    window.scrollTo({ top: sectionTop + target, behavior: "auto" });
+  }
+
   /* ---- update track position & UI ---- */
   function update(){
     const outerRect = outer.getBoundingClientRect();
@@ -2455,21 +2461,14 @@ if (!reduced && fine){
     bar.style.setProperty("--prog", pct + "%");
   }, { passive:true });
   track.parentElement.addEventListener("touchend", () => {
+    if (touchStartX === null) return;
     touchStartX = null;
+    scrollToOffset(currentOff);
     startRaf();
   });
 
-  /* ---- mouse wheel scroll on gallery ---- */
-  track.parentElement.addEventListener("wheel", e => {
-    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (Math.abs(delta) < 2) return;
-    e.preventDefault();
-    currentOff = Math.max(0, Math.min(maxScroll(), currentOff + delta * 1.4));
-    startRaf();
-  }, { passive: false });
-
   /* ---- mouse drag on gallery (desktop) ---- */
-  let dragStartX = null, dragStartOff = 0, isDragging = false;
+  let dragStartX = null, dragStartOff = 0, isDragging = false, suppressClick = false;
   const trackWrap = track.parentElement;
 
   trackWrap.addEventListener("pointerdown", e => {
@@ -2503,7 +2502,6 @@ if (!reduced && fine){
     track.style.transition = "";
     if (isDragging) {
       isDragging = false;
-      startRaf();
       /* snap до найближчої картки */
       const cards = track.querySelectorAll(".proj");
       let nearest = 0, minD = Infinity;
@@ -2511,8 +2509,9 @@ if (!reduced && fine){
         const d = Math.abs(c.offsetLeft - currentOff);
         if (d < minD){ minD = d; nearest = i; }
       });
-      const snapTarget = cards[nearest].offsetLeft - clamp(0, maxScroll(), 0);
       currentOff = Math.max(0, Math.min(maxScroll(), cards[nearest].offsetLeft));
+      suppressClick = true;
+      scrollToOffset(currentOff);
       startRaf();
     }
   });
@@ -2526,10 +2525,12 @@ if (!reduced && fine){
 
   /* prevent click after drag */
   trackWrap.addEventListener("click", e => {
-    if (isDragging) { e.stopPropagation(); e.preventDefault(); }
+    if (suppressClick) {
+      e.stopPropagation();
+      e.preventDefault();
+      suppressClick = false;
+    }
   }, true);
-
-  function clamp(min, max, v){ return Math.min(max, Math.max(min, v)); }
 })();
 
 /* ============================================================

@@ -2425,7 +2425,14 @@ if (!reduced && fine){
 
   track.querySelectorAll(".proj").forEach((card, i) => {
     card.addEventListener("click", () => openLb(i));
-    card.querySelector(".proj__cta").addEventListener("click", (e) => {
+    const cta = card.querySelector(".proj__cta");
+    cta.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+    });
+    cta.addEventListener("touchstart", (e) => {
+      e.stopPropagation();
+    }, { passive:true });
+    cta.addEventListener("click", (e) => {
       e.stopPropagation();
       openLb(i);
     });

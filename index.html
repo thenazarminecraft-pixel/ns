@@ -2300,16 +2300,11 @@ if (!reduced && fine){
     const pct = max > 0 ? (currentOff / max * 100).toFixed(1) : 0;
     bar.style.setProperty("--prog", pct + "%");
 
-    /* counter: first card visible in the native scroll viewport */
+    /* counter: gallery position from the first to the last project */
     const cards = track.querySelectorAll(".proj");
-    const viewportLeft = trackWrap.scrollLeft;
-    let closest = 0, found = false;
-    cards.forEach((c, i) => {
-      if (!found && c.offsetLeft + c.offsetWidth > viewportLeft + 1) {
-        closest = i;
-        found = true;
-      }
-    });
+    const closest = max > 0
+      ? Math.round((currentOff / max) * (TOTAL - 1))
+      : 0;
     const n = String(closest + 1).padStart(2, "0");
     const t = String(TOTAL).padStart(2, "0");
     counter.innerHTML = n + "&thinsp;/&thinsp;" + t;

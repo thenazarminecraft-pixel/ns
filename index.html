@@ -478,14 +478,20 @@ section{position:relative;z-index:2;}
 .proj:hover .proj__tags li{color:var(--paper);border-color:var(--line-strong);}
 
 .proj__cta{
+  appearance:none;
+  border:0;
+  padding:0;
+  background:transparent;
   margin-top:16px;
   display:inline-flex;align-items:center;gap:8px;
   font-size:12px;letter-spacing:.1em;color:var(--gold);
   font-family:var(--f-display);
+  cursor:pointer;
   opacity:0;transform:translateX(-8px);
   transition:opacity .35s ease, transform .35s ease;
 }
 .proj:hover .proj__cta{opacity:1;transform:none;}
+@media (pointer:coarse){.proj__cta{opacity:1;transform:none;}}
 .proj__cta-arrow{display:inline-block;transition:transform .3s;}
 .proj__cta:hover .proj__cta-arrow{transform:translateX(4px);}
 
@@ -1319,7 +1325,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p1.title">Карта загроз БпЛа/ракет</h3>
               <p class="proj__desc" data-i18n="projects.p1.desc">Інфографіка для Telegram-каналу — карта областей, які можуть бути під загрозою БпЛа або ракет.</p>
               <ul class="proj__tags"><li>Інфографіка</li><li>Telegram</li><li>GIS</li><li>Data Viz</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1335,7 +1341,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p2.title">Карта руху ворожих цілей</h3>
               <p class="proj__desc" data-i18n="projects.p2.desc">Інфографіка для Telegram-каналу — динамічна карта руху ворожих цілей у режимі реального часу.</p>
               <ul class="proj__tags"><li>Інфографіка</li><li>Telegram</li><li>Real-time</li><li>GIS</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1351,7 +1357,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p3.title">CASSANDRA</h3>
               <p class="proj__desc" data-i18n="projects.p3.desc">Інтелектуальна система аналізу загроз на базі LLM з генерацією розвідувальних звітів документів.</p>
               <ul class="proj__tags"><li>LLM API</li><li>Python</li><li>RAG</li><li>NLP</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1367,7 +1373,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p4.title">Collab IT</h3>
               <p class="proj__desc" data-i18n="projects.p4.desc">Тренувальний проект для компанії Collab IT — корпоративний застосунок із командними процесами та дашбордами.</p>
               <ul class="proj__tags"><li>React</li><li>Node.js</li><li>TypeScript</li><li>WebSocket</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1383,7 +1389,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p5.title">Ресторан — SOMA</h3>
               <p class="proj__desc" data-i18n="projects.p5.desc">Тренувальний проект сайту ресторану з преміальним дизайном, меню та системою онлайн-бронювання.</p>
               <ul class="proj__tags"><li>Figma</li><li>Design System</li><li>Next.js</li><li>CSS</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -1399,7 +1405,7 @@ body:has(.lb.is-open) .cur--ring{opacity:0;}
               <h3 class="proj__title" data-i18n="projects.p6.title">Stadnu — Cleaning SE</h3>
               <p class="proj__desc" data-i18n="projects.p6.desc">Проданий сайт для шведської компанії клінінгу та прибирання — повністю адаптивний, мультимовний.</p>
               <ul class="proj__tags"><li>React</li><li>Next.js</li><li>i18n</li><li>Vercel</li></ul>
-              <span class="proj__cta"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></span>
+              <button class="proj__cta" type="button"><span data-i18n="projects.view">Дивитись</span> <span class="proj__cta-arrow">→</span></button>
             </div>
           </article>
 
@@ -2419,6 +2425,10 @@ if (!reduced && fine){
 
   track.querySelectorAll(".proj").forEach((card, i) => {
     card.addEventListener("click", () => openLb(i));
+    card.querySelector(".proj__cta").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openLb(i);
+    });
     card.setAttribute("tabindex", "0");
     card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") openLb(i); });
   });
